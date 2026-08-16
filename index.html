@@ -1,363 +1,539 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Source to Sea | Upper Nile</title>
 
-  <title>Source to Sea | Upper Nile</title>
+<style>
+:root{
+  --paper:#f3eee5;
+  --ink:#171512;
+  --rust:#a64a28;
+  --blue:#1d5d82;
+  --left:64%;
+  --right:36%;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+  overflow-x:hidden;
+}
+img{display:block;height:auto}
+a{color:inherit;text-decoration:none}
 
-  <meta
-    name="description"
-    content="Source to Sea. A collection of private journeys along the Upper Nile."
-  >
+/* ---------- HEADER ---------- */
+header{
+  position:fixed;
+  z-index:100;
+  top:0; left:0;
+  width:100%;
+  padding:27px 3vw;
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+}
+header a,header nav{pointer-events:auto}
+.brand{
+  font:10px/1.15 Arial,sans-serif;
+  letter-spacing:.25em;
+}
+.brand span{display:block}
+nav{
+  display:flex;
+  gap:22px;
+  font:8px Arial,sans-serif;
+  letter-spacing:.17em;
+}
+nav a:last-child{
+  border-bottom:1px solid var(--rust);
+  padding-bottom:7px;
+}
 
-  <link rel="stylesheet" href="style.css">
+/* ---------- FIXED RIGHT EDITORIAL PANEL ---------- */
+.editorial{
+  position:fixed;
+  z-index:50;
+  right:0; top:0;
+  width:var(--right);
+  height:100vh;
+  background:rgba(243,238,229,.985);
+  border-left:1px solid rgba(0,0,0,.07);
+  padding:12vh 4.7vw 6vh;
+}
+.kicker,.overline,.index,.eyebrow,.label,.link{
+  font-family:Arial,sans-serif;
+  letter-spacing:.18em;
+}
+.kicker{
+  color:var(--rust);
+  font-size:8px;
+  margin:0 0 10vh;
+}
+.overline{font-size:8px;margin:0 0 18px}
+.editorial h1{
+  margin:0;
+  font-weight:400;
+  font-size:clamp(42px,4.3vw,70px);
+  line-height:.96;
+  letter-spacing:-.035em;
+}
+.rustline{
+  width:48px;height:2px;
+  background:var(--rust);
+  margin:27px 0;
+}
+.manifesto{
+  font:8px/1.9 Arial,sans-serif;
+  letter-spacing:.17em;
+}
+.index{
+  position:absolute;
+  left:4.7vw;
+  bottom:13vh;
+  display:grid;
+  gap:10px;
+  font-size:8px;
+}
+.index span{display:inline-block;width:27px;color:var(--rust)}
+.note{
+  position:absolute;
+  left:4.7vw;
+  bottom:5vh;
+  margin:0;
+  font-size:14px;
+  font-style:italic;
+  line-height:1.4;
+}
+
+/* ---------- LEFT STORY ---------- */
+.story{
+  width:var(--left);
+  position:relative;
+}
+.scene{
+  position:relative;
+  width:100%;
+  height:900px;
+  overflow:hidden;
+  background:var(--paper);
+}
+.label{
+  position:absolute;
+  z-index:30;
+  top:95px; left:55px;
+  font-size:8px;
+}
+.label b{
+  font:400 23px Georgia,serif;
+  color:var(--rust);
+  margin-right:12px;
+}
+.eyebrow{font-size:8px;margin:0}
+.smallline{
+  display:block;width:22px;height:1px;
+  background:var(--rust);
+  margin:12px 0 17px;
+}
+.copy{
+  position:absolute;
+  z-index:30;
+}
+.copy h2{
+  margin:0;
+  font-weight:400;
+  line-height:1.04;
+  letter-spacing:-.025em;
+}
+.copy p:not(.eyebrow){
+  font-size:14px;
+  line-height:1.55;
+}
+.link{
+  display:inline-flex;
+  gap:32px;
+  margin-top:18px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(0,0,0,.25);
+  font-size:8px;
+}
+
+/* Every asset is width-controlled only. Never force image height. */
+.asset{
+  position:absolute;
+  height:auto !important;
+  object-fit:contain;
+}
+
+/* ---------- COLLECTION ---------- */
+.collection{height:940px}
+.collection .nile{
+  z-index:1;
+  width:270px;
+  left:300px;
+  top:-65px;
+}
+.collection .circle{
+  z-index:2;
+  width:245px;
+  right:55px;
+  top:145px;
+}
+.collection .sketch{
+  z-index:5;
+  width:250px;
+  right:20px;
+  top:130px;
+  opacity:.72;
+}
+.boat-water{
+  z-index:8;
+  width:650px;
+  left:60px;
+  top:570px;
+  opacity:.82;
+}
+.boat{
+  z-index:10;
+  width:700px;
+  left:25px;
+  top:330px;
+}
+.collection .copy{
+  right:40px;
+  top:245px;
+  width:180px;
+}
+.collection .copy h2{
+  font-size:42px;
+  letter-spacing:.07em;
+}
+.micro{
+  font:8px Arial,sans-serif !important;
+  letter-spacing:.18em;
+}
+
+/* ---------- JOURNEYS ---------- */
+.journeys{height:1000px}
+.journeys .nile{
+  z-index:1;
+  width:265px;
+  left:310px;
+  top:-90px;
+}
+.journeys .circle{
+  z-index:2;
+  width:230px;
+  left:60px;
+  top:190px;
+}
+.palms{
+  z-index:7;
+  width:300px;
+  left:25px;
+  top:110px;
+}
+.temple{
+  z-index:8;
+  width:360px;
+  left:25px;
+  top:500px;
+}
+.bird{
+  z-index:12;
+  width:230px;
+  right:25px;
+  top:120px;
+}
+.journeys .copy{
+  width:285px;
+  right:35px;
+  top:390px;
+}
+.journeys .copy h2{font-size:43px}
+
+/* ---------- EDITIONS ---------- */
+.editions{height:960px}
+.editions .nile{
+  z-index:1;
+  width:270px;
+  left:305px;
+  top:-100px;
+}
+.bluecircle{
+  z-index:2;
+  width:330px;
+  left:35px;
+  top:155px;
+}
+.rustcircle{
+  z-index:3;
+  width:205px;
+  left:290px;
+  top:500px;
+}
+.card{
+  position:absolute;
+  z-index:10;
+  width:160px;
+  height:220px;
+  left:300px;
+  top:520px;
+  background:#d6bc95;
+  padding:22px 18px;
+  text-align:center;
+  transform:rotate(2deg);
+}
+.card span,.card small{
+  display:block;
+  font:7px Arial,sans-serif;
+  letter-spacing:.17em;
+}
+.card strong{
+  display:block;
+  margin:35px 0 28px;
+  font-size:17px;
+  line-height:1.3;
+  letter-spacing:.1em;
+  font-weight:400;
+}
+.editions .bird{
+  width:210px;
+  right:20px;
+  top:690px;
+  transform:scaleX(-1);
+  opacity:.8;
+}
+.editions .copy{
+  width:290px;
+  right:35px;
+  top:320px;
+}
+.editions .copy h2{font-size:39px}
+
+/* ---------- CLOSE ---------- */
+.close{
+  height:720px;
+}
+.close .nile{
+  width:270px;
+  left:305px;
+  top:-140px;
+}
+.source{
+  position:absolute;
+  z-index:20;
+  left:55px;
+  bottom:90px;
+  font-size:28px;
+  line-height:1.05;
+}
+.closing{
+  position:absolute;
+  z-index:20;
+  right:55px;
+  bottom:95px;
+  width:280px;
+  font-size:20px;
+  line-height:1.35;
+}
+.closing p{margin:0 0 5px}
+
+/* ---------- AFTER STORY ---------- */
+.after{
+  width:var(--left);
+  position:relative;
+  z-index:60;
+}
+.about{
+  padding:100px 8vw 110px;
+  background:#e9e0d3;
+}
+.about h2,.booking h2{
+  font-size:58px;
+  font-weight:400;
+  line-height:1;
+  margin:14px 0 22px;
+}
+.about>p:last-child{
+  max-width:560px;
+  font-size:17px;
+  line-height:1.65;
+}
+.booking{
+  min-height:360px;
+  background:#171a18;
+  color:#f3eee5;
+  padding:85px 8vw;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.booking-button{
+  border:1px solid rgba(255,255,255,.45);
+  padding:15px 22px;
+  font:8px Arial,sans-serif;
+  letter-spacing:.18em;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:900px){
+  :root{--left:100%;--right:100%}
+  header nav{display:none}
+  .editorial{
+    position:relative;
+    width:100%;
+    height:760px;
+    padding:120px 8vw 60px;
+  }
+  .index{left:8vw}
+  .note{left:8vw}
+  .story,.after{width:100%}
+}
+@media(max-width:700px){
+  .scene{
+    transform-origin:top left;
+  }
+  .editorial h1{font-size:48px}
+  .collection .copy,
+  .journeys .copy,
+  .editions .copy{right:22px}
+}
+</style>
 </head>
 
 <body>
 
-  <header class="site-header">
-
-    <a class="brand" href="#top" aria-label="Source to Sea home">
-      <span>SOURCE</span>
-      <span>TO</span>
-      <span>SEA</span>
-      <span class="brand-mark" aria-hidden="true"></span>
-    </a>
-
-    <nav class="main-nav" aria-label="Primary navigation">
-      <a href="#collection">BOATS</a>
-      <a href="#journeys">JOURNEYS</a>
-      <a href="#editions">EDITIONS</a>
-      <a href="#about">ABOUT</a>
-      <a class="booking-nav" href="#booking">AGENT BOOKING →</a>
-    </nav>
-
-  </header>
-
-
-  <main id="top">
-
-    <section class="story-shell">
-
-      <!-- ====================================================
-           LEFT / SCROLLING VISUAL STORY
-           ==================================================== -->
-
-      <div class="story-column">
-
-        <!-- COLLECTION -->
-        <section id="collection" class="scene scene-collection">
-
-          <div class="scene-river river-a" aria-hidden="true">
-            <img src="nile-watercolor.png" alt="">
-          </div>
-
-          <div class="scene-label">
-            <span>01 /</span>
-            <strong>THE COLLECTION</strong>
-          </div>
-
-          <div class="map-marker marker-aswan">
-            <span>ASWAN</span>
-            <i></i>
-          </div>
-
-          <img
-            src="terracotta-circle.png"
-            alt=""
-            class="scene-asset collection-circle"
-            aria-hidden="true"
-          >
-
-          <img
-            src="dehabiya-sketch.png"
-            alt=""
-            class="scene-asset collection-sketch"
-            aria-hidden="true"
-          >
-
-          <div class="boat-group">
-
-            <img
-              src="dehabiya-water.png"
-              alt=""
-              class="boat-water"
-              aria-hidden="true"
-            >
-
-            <img
-              src="dehabiya-main.png"
-              alt="Traditional Egyptian dahabiya"
-              class="boat-main"
-            >
-
-          </div>
-
-          <div class="scene-copy collection-copy">
-            <p class="eyebrow">THE COLLECTION</p>
-            <span class="small-rust-line"></span>
-            <h2>RAZIS</h2>
-            <p class="micro">BUILT IN ESNA</p>
-
-            <a href="#journeys" class="editorial-link">
-              EXPLORE BOATS <span>→</span>
-            </a>
-          </div>
-
-        </section>
-
-
-        <!-- JOURNEYS -->
-        <section id="journeys" class="scene scene-journeys">
-
-          <div class="scene-river river-b" aria-hidden="true">
-            <img src="nile-watercolor.png" alt="">
-          </div>
-
-          <div class="scene-label">
-            <span>02 /</span>
-            <strong>JOURNEYS</strong>
-          </div>
-
-          <img
-            src="terracotta-circle.png"
-            alt=""
-            class="scene-asset journey-circle"
-            aria-hidden="true"
-          >
-
-          <img
-            src="date-palms-sketch.png"
-            alt=""
-            class="scene-asset journey-palms"
-            aria-hidden="true"
-          >
-
-          <img
-            src="temple-ruins.png"
-            alt="Ancient Egyptian temple ruins"
-            class="scene-asset journey-temple"
-          >
-
-          <img
-            src="nile-bird.png"
-            alt=""
-            class="scene-asset journey-bird"
-            aria-hidden="true"
-          >
-
-          <div class="map-marker marker-esna">
-            <i></i>
-            <span>ESNA</span>
-          </div>
-
-          <div class="scene-copy journeys-copy">
-            <p class="eyebrow">JOURNEYS</p>
-            <span class="small-rust-line"></span>
-
-            <h2>
-              The River.<br>
-              The Journey.<br>
-              The Connection.
-            </h2>
-
-            <p>
-              Private journeys between Aswan and Esna, shaped by the river rather
-              than a rigid itinerary.
-            </p>
-
-            <a href="#editions" class="editorial-link">
-              EXPLORE JOURNEYS <span>→</span>
-            </a>
-          </div>
-
-        </section>
-
-
-        <!-- EDITIONS -->
-        <section id="editions" class="scene scene-editions">
-
-          <div class="scene-river river-c" aria-hidden="true">
-            <img src="nile-watercolor.png" alt="">
-          </div>
-
-          <div class="scene-label">
-            <span>03 /</span>
-            <strong>EDITIONS</strong>
-          </div>
-
-          <img
-            src="blue-paper-circle.png"
-            alt=""
-            class="scene-asset editions-blue-circle"
-            aria-hidden="true"
-          >
-
-          <img
-            src="terracotta-circle.png"
-            alt=""
-            class="scene-asset editions-rust-circle"
-            aria-hidden="true"
-          >
-
-          <div class="edition-card" aria-hidden="true">
-            <span>EDITION / 01</span>
-
-            <strong>
-              ARTISTS<br>
-              ON THE NILE
-            </strong>
-
-            <small>WINTER 2027</small>
-
-            <b class="mini-mark"></b>
-          </div>
-
-          <img
-            src="nile-bird.png"
-            alt=""
-            class="scene-asset editions-bird"
-            aria-hidden="true"
-          >
-
-          <div class="scene-copy editions-copy">
-            <p class="eyebrow">EDITIONS</p>
-            <span class="small-rust-line"></span>
-
-            <h2>
-              Seasonal editions.<br>
-              Artists on the Nile.<br>
-              New perspectives.
-            </h2>
-
-            <p>
-              Art, craft and changing collaborations that expand the collection
-              beyond the boats themselves.
-            </p>
-
-            <a href="#story-close" class="editorial-link">
-              DISCOVER EDITIONS <span>→</span>
-            </a>
-          </div>
-
-        </section>
-
-
-        <!-- CLOSING -->
-        <section id="story-close" class="scene scene-close">
-
-          <div class="scene-river river-d" aria-hidden="true">
-            <img src="nile-watercolor.png" alt="">
-          </div>
-
-          <div class="from-source">
-            <span>
-              From source<br>
-              to sea.
-            </span>
-
-            <b class="mini-mark"></b>
-          </div>
-
-          <div class="closing-copy">
-            <p>The Nile connects more than places.</p>
-            <p>It connects people, craft and stories.</p>
-            <span class="rust-line"></span>
-          </div>
-
-        </section>
-
-      </div>
-
-
-      <!-- ====================================================
-           RIGHT / FIXED EDITORIAL PANEL
-           ==================================================== -->
-
-      <aside class="fixed-panel">
-
-        <div class="panel-inner">
-
-          <p class="panel-kicker">SOURCE TO SEA</p>
-
-          <div class="panel-main">
-
-            <p class="panel-overline">UPPER NILE COLLECTION</p>
-
-            <h1>
-              A collection<br>
-              shaped along<br>
-              the river.
-            </h1>
-
-            <span class="rust-line"></span>
-
-            <p class="panel-intro">
-              DISTINCTIVE BOATS.<br>
-              MEANINGFUL CONNECTIONS.<br>
-              CURATED EXPERIENCES.
-            </p>
-
-          </div>
-
-          <div class="panel-index">
-            <a href="#collection"><span>01</span> COLLECTION</a>
-            <a href="#journeys"><span>02</span> JOURNEYS</a>
-            <a href="#editions"><span>03</span> EDITIONS</a>
-          </div>
-
-          <p class="panel-note">
-            Sailing between Aswan and Esna.<br>
-            Where time follows the river.
-          </p>
-
-        </div>
-
-      </aside>
-
-    </section>
-
-
-    <!-- ====================================================
-         OFF-RIVER CONTENT
-         ==================================================== -->
-
-    <section id="about" class="about-section">
-
-      <p class="eyebrow">ABOUT</p>
-
-      <h2>Upper Nile Collection</h2>
-
-      <p>
-        This quieter section comes after the visual journey and can hold the
-        collection story, philosophy and people behind it.
-      </p>
-
-    </section>
-
-
-    <section id="booking" class="booking-section">
-
-      <div>
-
-        <p class="eyebrow">FOR TRAVEL PARTNERS</p>
-
-        <h2>Plan a journey.</h2>
-
-        <p>
-          View availability, direction and trade access.
-        </p>
-
-      </div>
-
-      <a href="#" class="booking-button">
-        AGENT ACCESS →
-      </a>
-
-    </section>
-
-  </main>
+<header>
+  <a class="brand" href="#top">
+    <span>SOURCE</span><span>TO</span><span>SEA</span>
+  </a>
+  <nav>
+    <a href="#collection">BOATS</a>
+    <a href="#journeys">JOURNEYS</a>
+    <a href="#editions">EDITIONS</a>
+    <a href="#about">ABOUT</a>
+    <a href="#booking">AGENT BOOKING →</a>
+  </nav>
+</header>
+
+<aside class="editorial" id="top">
+  <p class="kicker">SOURCE TO SEA</p>
+  <p class="overline">UPPER NILE COLLECTION</p>
+
+  <h1>A collection<br>shaped along<br>the river.</h1>
+  <span class="rustline"></span>
+
+  <p class="manifesto">
+    DISTINCTIVE BOATS.<br>
+    MEANINGFUL CONNECTIONS.<br>
+    CURATED EXPERIENCES.
+  </p>
+
+  <div class="index">
+    <a href="#collection"><span>01</span> COLLECTION</a>
+    <a href="#journeys"><span>02</span> JOURNEYS</a>
+    <a href="#editions"><span>03</span> EDITIONS</a>
+  </div>
+
+  <p class="note">Sailing between Aswan and Esna.<br>Where time follows the river.</p>
+</aside>
+
+<main class="story">
+
+  <section class="scene collection" id="collection">
+    <div class="label"><b>01 /</b> THE COLLECTION</div>
+
+    <img class="asset nile" src="nile-watercolor.png" alt="">
+    <img class="asset circle" src="terracotta-circle.png" alt="">
+    <img class="asset sketch" src="dehabiya-sketch.png" alt="">
+
+    <img class="asset boat-water" src="dehabiya-water.png" alt="">
+    <img class="asset boat" src="dehabiya-main.png" alt="Traditional Egyptian dahabiya">
+
+    <div class="copy">
+      <p class="eyebrow">THE COLLECTION</p>
+      <span class="smallline"></span>
+      <h2>RAZIS</h2>
+      <p class="micro">BUILT IN ESNA</p>
+      <a class="link" href="#journeys">EXPLORE BOATS <span>→</span></a>
+    </div>
+  </section>
+
+  <section class="scene journeys" id="journeys">
+    <div class="label"><b>02 /</b> JOURNEYS</div>
+
+    <img class="asset nile" src="nile-watercolor.png" alt="">
+    <img class="asset circle" src="terracotta-circle.png" alt="">
+    <img class="asset palms" src="date-palms-sketch.png" alt="">
+    <img class="asset temple" src="temple-ruins.png" alt="Ancient Egyptian temple ruins">
+    <img class="asset bird" src="nile-bird.png" alt="">
+
+    <div class="copy">
+      <p class="eyebrow">JOURNEYS</p>
+      <span class="smallline"></span>
+      <h2>The River.<br>The Journey.<br>The Connection.</h2>
+      <p>Private journeys between Aswan and Esna, shaped by the river rather than a rigid itinerary.</p>
+      <a class="link" href="#editions">EXPLORE JOURNEYS <span>→</span></a>
+    </div>
+  </section>
+
+  <section class="scene editions" id="editions">
+    <div class="label"><b>03 /</b> EDITIONS</div>
+
+    <img class="asset nile" src="nile-watercolor.png" alt="">
+    <img class="asset bluecircle" src="blue-paper-circle.png" alt="">
+    <img class="asset rustcircle" src="terracotta-circle.png" alt="">
+
+    <div class="card">
+      <span>EDITION / 01</span>
+      <strong>ARTISTS<br>ON THE NILE</strong>
+      <small>WINTER 2027</small>
+    </div>
+
+    <img class="asset bird" src="nile-bird.png" alt="">
+
+    <div class="copy">
+      <p class="eyebrow">EDITIONS</p>
+      <span class="smallline"></span>
+      <h2>Seasonal editions.<br>Artists on the Nile.<br>New perspectives.</h2>
+      <p>Art, craft and changing collaborations that expand the collection beyond the boats themselves.</p>
+      <a class="link" href="#close">DISCOVER EDITIONS <span>→</span></a>
+    </div>
+  </section>
+
+  <section class="scene close" id="close">
+    <img class="asset nile" src="nile-watercolor.png" alt="">
+    <div class="source">From source<br>to sea.</div>
+    <div class="closing">
+      <p>The Nile connects more than places.</p>
+      <p>It connects people, craft and stories.</p>
+      <span class="rustline"></span>
+    </div>
+  </section>
+
+</main>
+
+<div class="after">
+  <section class="about" id="about">
+    <p class="eyebrow">ABOUT</p>
+    <h2>Upper Nile Collection</h2>
+    <p>The collection story, philosophy and people behind the journeys live here, after the visual river experience rather than interrupting it.</p>
+  </section>
+
+  <section class="booking" id="booking">
+    <div>
+      <p class="eyebrow">FOR TRAVEL PARTNERS</p>
+      <h2>Plan a journey.</h2>
+      <p>View availability, direction and trade access.</p>
+    </div>
+    <a class="booking-button" href="#">AGENT ACCESS →</a>
+  </section>
+</div>
 
 </body>
 </html>
