@@ -1,29 +1,27 @@
 /* =========================================================
-   SOURCE TO SEA
-   Homepage composition test
+   SOURCE TO SEA / UPPER NILE
+   Concept build
+   Fixed editorial panel + scrolling Nile story
    ========================================================= */
 
-
 :root {
-  --paper: #f4efe7;
-  --paper-light: #faf7f1;
+  --paper: #f3eee5;
+  --paper-deep: #e8dfd1;
+  --ink: #171512;
+  --muted: #625d55;
+  --rust: #a84824;
+  --blue: #1f5d7b;
+  --rule: rgba(23, 21, 18, 0.22);
 
-  --ink: #171714;
+  --header-h: 76px;
+  --panel-w: 34vw;
+  --story-w: 66vw;
 
-  --rust: #a84b24;
-
-  --line: rgba(23, 23, 20, 0.42);
-
-  --serif: Georgia, "Times New Roman", serif;
-
-  --sans:
-    Arial,
-    Helvetica,
-    sans-serif;
+  --serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  --sans: "Helvetica Neue", Arial, sans-serif;
 }
 
-
-/* RESET */
+/* ---------- RESET ---------- */
 
 * {
   box-sizing: border-box;
@@ -35,18 +33,15 @@ html {
 
 body {
   margin: 0;
-
-  background:
-    radial-gradient(
-      circle at 45% 15%,
-      rgba(255, 255, 255, 0.68),
-      transparent 30%
-    ),
-    var(--paper);
-
   color: var(--ink);
-
+  background: var(--paper);
   font-family: var(--serif);
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 a {
@@ -54,778 +49,701 @@ a {
   text-decoration: none;
 }
 
-img {
-  display: block;
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* ---------- HEADER ---------- */
 
 .site-header {
-  position: absolute;
-
+  position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
-
   width: 100%;
-
-  z-index: 100;
-
+  height: var(--header-h);
+  padding: 18px 3vw;
   display: flex;
-
-  justify-content: space-between;
   align-items: flex-start;
-
-  padding:
-    40px
-    4vw;
-}
-
-
-.brand {
-  position: relative;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  font-size: 17px;
-
-  line-height: 1.05;
-
-  letter-spacing: 0.32em;
-}
-
-
-.brand-mark {
-  position: absolute;
-
-  top: 27px;
-  left: 75px;
-
-  display: block;
-
-  width: 50px;
-  height: 50px;
-
-  border:
-    3px
-    solid
-    var(--rust);
-
-  border-right-color: transparent;
-
-  border-radius: 50%;
-
-  transform: rotate(12deg);
-}
-
-
-.brand-mark::after {
-  content: "";
-
-  position: absolute;
-
-  left: 19px;
-  bottom: -7px;
-
-  width: 14px;
-  height: 3px;
-
-  background: var(--rust);
-
-  transform: rotate(-10deg);
-}
-
-
-.main-nav {
-  display: flex;
-
-  gap: 31px;
-
-  padding-top: 6px;
-
-  font-family: var(--sans);
-
-  font-size: 10px;
-
-  letter-spacing: 0.15em;
-}
-
-
-.booking-nav {
-  position: relative;
-}
-
-
-.booking-nav::after {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  right: 20px;
-
-  bottom: -10px;
-
-  height: 1px;
-
-  background: var(--rust);
-}
-
-
-/* =========================================================
-   PAGE
-   ========================================================= */
-
-.river-page {
-  position: relative;
-
-  min-height: 2550px;
-
-  overflow: hidden;
-}
-
-
-/* =========================================================
-   NILE
-   ========================================================= */
-
-.nile-layer {
-  position: absolute;
-
-  top: -30px;
-
-  left: 24%;
-
-  width: 42%;
-
-  height: 2580px;
-
-  z-index: 2;
-
+  justify-content: space-between;
   pointer-events: none;
 }
 
-
-.nile-image {
-  width: 100%;
-  height: 100%;
-
-  object-fit: fill;
-
-  object-position: center top;
+.brand,
+.main-nav {
+  pointer-events: auto;
 }
 
-
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
-
-h1,
-h2,
-p {
-  margin-top: 0;
-}
-
-
-.eyebrow {
-  margin-bottom: 14px;
-
+.brand {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0 5px;
+  width: 74px;
   font-family: var(--sans);
-
-  font-size: 10px;
-
-  letter-spacing: 0.20em;
+  font-size: 8px;
+  line-height: 1.1;
+  letter-spacing: 0.28em;
+  font-weight: 600;
 }
 
+.brand span:nth-child(1),
+.brand span:nth-child(3) {
+  grid-column: 1;
+}
 
-.caps {
+.brand span:nth-child(2) {
+  grid-column: 1;
+}
+
+.brand-mark {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  width: 18px;
+  height: 18px;
+  margin-top: -2px;
+  border: 2px solid var(--rust);
+  border-right-color: transparent;
+  border-radius: 50%;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 23px;
   font-family: var(--sans);
-
-  font-size: 10px;
-
-  line-height: 2;
-
-  letter-spacing: 0.20em;
+  font-size: 7px;
+  letter-spacing: 0.19em;
+  font-weight: 600;
 }
 
-
-.caps.small {
-  margin-top: 11px;
-
-  font-size: 9px;
+.booking-nav {
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--rust);
 }
 
+/* ---------- MAIN STORY STRUCTURE ---------- */
 
-.rust-line {
-  display: block;
-
-  width: 58px;
-  height: 3px;
-
-  margin:
-    33px
-    0;
-
-  background: var(--rust);
-
-  transform: rotate(-1deg);
-}
-
-
-.rust-line.short {
-  width: 38px;
-}
-
-
-.small-rust-line {
-  display: block;
-
-  width: 25px;
-  height: 2px;
-
-  margin-bottom: 26px;
-
-  background: var(--rust);
-}
-
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-.hero {
+.story-shell {
   position: relative;
-
-  height: 720px;
-
-  z-index: 10;
+  min-height: 100vh;
+  background: var(--paper);
 }
 
-
-.hero-copy {
-  position: absolute;
-
-  top: 235px;
-  left: 4vw;
-
-  width: 34vw;
-
-  max-width: 560px;
+.story-scroll {
+  position: relative;
+  width: var(--story-w);
+  min-height: 430vh;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,0.35), transparent 25%),
+    var(--paper);
+  overflow: hidden;
 }
 
+.fixed-panel {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  width: var(--panel-w);
+  height: 100vh;
+  padding: 110px 4.5vw 48px;
+  background: rgba(243, 238, 229, 0.96);
+  border-left: 1px solid rgba(23, 21, 18, 0.08);
+}
 
-.hero-copy h1 {
+.panel-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-kicker,
+.panel-overline,
+.eyebrow,
+.micro {
   margin: 0;
+  font-family: var(--sans);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
 
-  font-size:
-    clamp(
-      54px,
-      5vw,
-      86px
-    );
+.panel-kicker {
+  margin-bottom: auto;
+  color: var(--rust);
+}
 
+.panel-main {
+  margin: auto 0;
+}
+
+.panel-overline {
+  margin-bottom: 20px;
+}
+
+.panel-main h1 {
+  margin: 0;
+  max-width: 390px;
+  font-size: clamp(38px, 4.2vw, 70px);
+  line-height: 0.94;
   font-weight: 400;
-
-  line-height: 1.02;
-
   letter-spacing: -0.035em;
 }
 
-
-.collection-copy {
-  position: absolute;
-
-  top: 180px;
-  right: 12vw;
-
-  width: 250px;
-}
-
-
-.collection-number {
-  margin-bottom: 8px;
-
-  color: var(--rust);
-
-  font-size: 27px;
-
-  letter-spacing: 0.12em;
-}
-
-
-.collection-copy h2 {
-  margin: 0;
-
-  font-size: 31px;
-
-  font-weight: 400;
-
-  letter-spacing: 0.16em;
-}
-
-
-/* =========================================================
-   MAP LABELS
-   ========================================================= */
-
-.map-label {
-  position: absolute;
-
-  z-index: 25;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size: 16px;
-}
-
-
-.map-dot {
+.rust-line,
+.small-rust-line {
   display: block;
-
-  width: 11px;
-  height: 11px;
-
-  border-radius: 50%;
-
   background: var(--rust);
 }
 
+.rust-line {
+  width: 36px;
+  height: 2px;
+  margin: 27px 0;
+}
 
-.map-line {
-  display: block;
-
-  width: 55px;
+.small-rust-line {
+  width: 23px;
   height: 1px;
-
-  background: var(--rust);
-
-  transform: rotate(29deg);
+  margin: 13px 0 17px;
 }
 
-
-.map-line.reverse {
-  transform: rotate(-35deg);
-}
-
-
-.aswan {
-  top: 135px;
-
-  left: 29%;
-}
-
-
-.esna {
-  top: 1370px;
-
-  left: 38%;
-}
-
-
-.luxor {
-  bottom: 270px;
-
-  left: 51%;
-}
-
-
-/* =========================================================
-   HANDWRITTEN NOTE
-   ========================================================= */
-
-.river-note {
-  position: absolute;
-
-  top: 800px;
-  left: 4vw;
-
-  z-index: 20;
-
-  font-size: 18px;
-
-  font-style: italic;
-
-  line-height: 1.55;
-
-  transform: rotate(-2deg);
-}
-
-
-/* =========================================================
-   JOURNEYS
-   ========================================================= */
-
-.journeys-copy {
-  position: absolute;
-
-  top: 880px;
-  right: 5vw;
-
-  z-index: 20;
-
-  width: 36vw;
-}
-
-
-.journeys-copy h2 {
+.panel-intro {
   margin: 0;
-
-  font-size:
-    clamp(
-      35px,
-      3.4vw,
-      53px
-    );
-
-  font-weight: 400;
-
-  line-height: 1.15;
+  font-family: var(--sans);
+  font-size: 8px;
+  line-height: 1.8;
+  letter-spacing: 0.18em;
 }
 
+.panel-index {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+  font-family: var(--sans);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+}
+
+.panel-index span {
+  display: inline-block;
+  width: 27px;
+  color: var(--rust);
+}
+
+.panel-note {
+  margin: 0;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* ---------- THE RIVER ---------- */
+
+/*
+   IMPORTANT:
+   The watercolor is NEVER forced to a fixed height.
+   Its original aspect ratio is preserved with height:auto.
+*/
+
+.river-spine {
+  position: absolute;
+  z-index: 1;
+  top: 1.5vh;
+  left: 50%;
+  width: min(27vw, 420px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.river-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: top center;
+}
+
+/* ---------- CHAPTERS ---------- */
+
+.chapter {
+  position: relative;
+  z-index: 2;
+  min-height: 105vh;
+  padding: 12vh 4vw 8vh;
+}
+
+.chapter-number {
+  position: absolute;
+  z-index: 5;
+  top: 13vh;
+  left: 4vw;
+  color: var(--rust);
+  font-size: 23px;
+  letter-spacing: 0.1em;
+}
+
+.asset {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.editorial-copy {
+  position: absolute;
+  z-index: 10;
+}
+
+.editorial-copy h2 {
+  margin: 0;
+  font-size: clamp(32px, 3.2vw, 55px);
+  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.editorial-copy > p:not(.eyebrow):not(.micro) {
+  max-width: 300px;
+  margin: 22px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
 
 .editorial-link {
-  display: flex;
-
-  justify-content: space-between;
-
-  width: 190px;
-
-  margin-top: 28px;
-
-  padding-bottom: 11px;
-
-  border-bottom:
-    1px
-    solid
-    var(--line);
-
+  display: inline-flex;
+  gap: 42px;
+  align-items: center;
+  margin-top: 25px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ink);
   font-family: var(--sans);
-
-  font-size: 9px;
-
-  letter-spacing: 0.16em;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
 }
 
+.map-marker {
+  position: absolute;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--sans);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+}
 
-/* =========================================================
-   EDITIONS
-   ========================================================= */
+.map-marker i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--rust);
+  border-radius: 50%;
+}
+
+/* ---------- COLLECTION ---------- */
+
+.collection-chapter {
+  min-height: 112vh;
+}
+
+.aswan-marker {
+  top: 19vh;
+  left: 40%;
+}
+
+.collection-circle {
+  z-index: 2;
+  top: 23vh;
+  left: 27%;
+  width: 28%;
+}
+
+.collection-sketch {
+  z-index: 4;
+  top: 14vh;
+  left: 51%;
+  width: 18%;
+  opacity: 0.67;
+}
+
+.boat-composition {
+  position: absolute;
+  z-index: 6;
+  top: 35vh;
+  left: 7%;
+  width: 72%;
+  height: 48vh;
+}
+
+.boat-main {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 10%;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.boat-water {
+  position: absolute;
+  z-index: 2;
+  left: 5%;
+  bottom: 0;
+  width: 90%;
+  height: auto;
+  opacity: 0.82;
+}
+
+.collection-copy {
+  top: 20vh;
+  right: 4vw;
+  width: 21%;
+}
+
+.collection-copy h2 {
+  font-size: clamp(28px, 3vw, 48px);
+}
+
+.collection-copy .micro {
+  margin-top: 8px;
+}
+
+/* ---------- JOURNEYS ---------- */
+
+.journeys-chapter {
+  min-height: 110vh;
+}
+
+.journey-circle {
+  top: 17vh;
+  left: 10%;
+  width: 27%;
+}
+
+.palms {
+  z-index: 6;
+  top: 9vh;
+  left: 5%;
+  width: 27%;
+  opacity: 0.86;
+}
+
+.temple {
+  z-index: 5;
+  left: 7%;
+  bottom: 7vh;
+  width: 37%;
+}
+
+.journey-bird {
+  z-index: 8;
+  top: 17vh;
+  left: 37%;
+  width: 21%;
+  transform: rotate(-4deg);
+}
+
+.esna-marker {
+  top: 58%;
+  left: 46%;
+}
+
+.journeys-copy {
+  top: 35vh;
+  right: 3.5vw;
+  width: 34%;
+}
+
+/* ---------- EDITIONS ---------- */
+
+.editions-chapter {
+  min-height: 108vh;
+}
+
+.blue-circle {
+  z-index: 2;
+  top: 13vh;
+  left: 7%;
+  width: 41%;
+}
+
+.editions-circle {
+  z-index: 3;
+  top: 33vh;
+  left: 31%;
+  width: 20%;
+  opacity: 0.9;
+}
+
+.edition-card {
+  position: absolute;
+  z-index: 8;
+  top: 31vh;
+  left: 13%;
+  width: 180px;
+  min-height: 220px;
+  padding: 24px 20px;
+  background: rgba(243, 238, 229, 0.91);
+  transform: rotate(-2deg);
+  box-shadow: 0 8px 30px rgba(23, 21, 18, 0.07);
+}
+
+.edition-card span,
+.edition-card small {
+  display: block;
+  font-family: var(--sans);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+}
+
+.edition-card strong {
+  display: block;
+  margin: 38px 0;
+  font-size: 19px;
+  line-height: 1.15;
+  font-weight: 400;
+}
+
+.mini-mark {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin-top: 20px;
+  border: 2px solid var(--rust);
+  border-right-color: transparent;
+  border-radius: 50%;
+}
 
 .editions-copy {
+  top: 25vh;
+  right: 3.5vw;
+  width: 34%;
+}
+
+.editions-bird {
+  z-index: 7;
+  right: 5%;
+  bottom: 10vh;
+  width: 23%;
+  opacity: 0.72;
+  transform: scaleX(-1) rotate(-5deg);
+}
+
+/* ---------- CLOSE OF NILE ---------- */
+
+.closing-chapter {
+  min-height: 100vh;
+}
+
+.from-source {
   position: absolute;
-
-  top: 1640px;
-  right: 7vw;
-
-  z-index: 20;
-
-  width: 330px;
+  left: 6%;
+  bottom: 16vh;
+  font-size: 25px;
+  line-height: 1.05;
 }
 
-
-.editions-copy h2 {
-  margin: 0;
-
-  font-size: 28px;
-
-  font-weight: 400;
-
-  line-height: 1.36;
-}
-
-
-/* =========================================================
-   CLOSING
-   ========================================================= */
-
-.source-close {
+.closing-message {
   position: absolute;
-
-  bottom: 145px;
-  left: 4vw;
-
-  z-index: 20;
-
-  display: flex;
-
-  align-items: flex-end;
-
-  gap: 24px;
-
-  font-size: 27px;
-
-  line-height: 1.2;
+  right: 5%;
+  bottom: 17vh;
+  width: 31%;
+  font-size: 20px;
+  line-height: 1.25;
 }
 
-
-.small-mark {
-  position: relative;
-
-  top: auto;
-  left: auto;
-
-  width: 53px;
-  height: 53px;
+.closing-message p {
+  margin: 0 0 7px;
 }
 
+/* ---------- AFTER THE NILE ---------- */
 
-.closing-note {
-  position: absolute;
-
-  right: 5vw;
-  bottom: 120px;
-
-  z-index: 20;
-
-  font-size: 18px;
-
-  font-style: italic;
-
-  line-height: 1.58;
-
-  transform: rotate(-1.4deg);
-}
-
-
-/* =========================================================
-   BOOKING
-   ========================================================= */
-
+.about-section,
 .booking-section {
   position: relative;
-
   z-index: 30;
-
-  min-height: 430px;
-
-  display: flex;
-
-  justify-content: space-between;
-  align-items: center;
-
-  gap: 80px;
-
-  padding:
-    90px
-    8vw;
-
-  background: #171a18;
-
-  color: var(--paper-light);
+  margin-right: var(--panel-w);
 }
 
-
-.booking-copy {
-  max-width: 620px;
+.about-section {
+  min-height: 70vh;
+  padding: 14vh 8vw;
+  background: var(--paper-deep);
 }
 
-
-.booking-copy h2 {
-  margin:
-    10px
-    0
-    20px;
-
-  font-size:
-    clamp(
-      46px,
-      5vw,
-      76px
-    );
-
+.about-section h2,
+.booking-section h2 {
+  margin: 17px 0;
+  font-size: clamp(40px, 5vw, 75px);
+  line-height: 0.95;
   font-weight: 400;
 }
 
-
-.booking-copy > p:last-child {
-  max-width: 490px;
-
-  font-size: 17px;
-
-  line-height: 1.65;
+.about-section > p:last-child {
+  max-width: 580px;
+  font-size: 18px;
+  line-height: 1.55;
 }
 
+.booking-section {
+  min-height: 42vh;
+  padding: 10vh 8vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  color: #f2eee6;
+  background: #171a18;
+}
+
+.booking-section p {
+  margin: 0;
+}
 
 .booking-button {
-  flex: none;
-
-  padding:
-    17px
-    24px;
-
-  border:
-    1px
-    solid
-    rgba(
-      255,
-      255,
-      255,
-      0.5
-    );
-
+  flex: 0 0 auto;
+  padding: 15px 22px;
+  border: 1px solid rgba(242, 238, 230, 0.45);
   font-family: var(--sans);
-
-  font-size: 10px;
-
-  letter-spacing: 0.15em;
+  font-size: 8px;
+  letter-spacing: 0.18em;
 }
 
+/* ---------- RESPONSIVE ---------- */
 
-/* =========================================================
-   ABOUT / END
-   ========================================================= */
+@media (max-width: 980px) {
 
-.about-section {
-  min-height: 170px;
-
-  display: flex;
-
-  align-items: center;
-
-  padding:
-    50px
-    4vw;
-
-  font-family: var(--sans);
-
-  font-size: 9px;
-
-  letter-spacing: 0.20em;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 850px) {
-
-  .site-header {
-    position: relative;
-
-    padding:
-      26px
-      22px;
+  :root {
+    --panel-w: 38vw;
+    --story-w: 62vw;
   }
-
 
   .main-nav {
+    gap: 12px;
+  }
+
+  .main-nav a:not(.booking-nav) {
     display: none;
   }
 
-
-  .river-page {
-    min-height: 2650px;
+  .river-spine {
+    width: 31vw;
   }
 
-
-  .nile-layer {
-    top: 320px;
-    left: 17%;
-
-    width: 92%;
-
-    height: 2300px;
-
-    opacity: 0.92;
-  }
-
-
-  .hero {
-    height: 810px;
-  }
-
-
-  .hero-copy {
-    top: 80px;
-    left: 22px;
-
-    width: 82vw;
-  }
-
-
-  .hero-copy h1 {
-    font-size: 52px;
-  }
-
-
-  .collection-copy {
-    top: 550px;
-    right: 25px;
-
-    width: 220px;
-  }
-
-
-  .aswan {
-    top: 420px;
-    left: 15%;
-  }
-
-
-  .river-note {
-    top: 1000px;
-    left: 22px;
-  }
-
-
-  .journeys-copy {
-    top: 1270px;
-    right: 24px;
-
-    width: 64vw;
-  }
-
-
-  .esna {
-    top: 1540px;
-    left: 30%;
-  }
-
-
+  .collection-copy,
+  .journeys-copy,
   .editions-copy {
-    top: 1900px;
-    right: 24px;
-
-    width: 65vw;
+    right: 2.5vw;
   }
 
+  .boat-composition {
+    left: 2%;
+    width: 82%;
+  }
+}
 
-  .luxor {
-    bottom: 360px;
-    left: 34%;
+@media (max-width: 760px) {
+
+  :root {
+    --panel-w: 100%;
+    --story-w: 100%;
   }
 
-
-  .source-close {
-    left: 22px;
-    bottom: 120px;
+  .site-header {
+    position: absolute;
+    padding: 18px 22px;
   }
 
-
-  .closing-note {
-    display: none;
+  .fixed-panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding: 120px 28px 45px;
+    border-left: 0;
   }
 
+  .story-shell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fixed-panel {
+    order: 1;
+  }
+
+  .story-scroll {
+    order: 2;
+    width: 100%;
+  }
+
+  .river-spine {
+    left: 50%;
+    width: 46vw;
+  }
+
+  .chapter {
+    min-height: 105vh;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .chapter-number {
+    left: 25px;
+  }
+
+  .collection-copy,
+  .journeys-copy,
+  .editions-copy {
+    right: 25px;
+    width: 39%;
+  }
+
+  .collection-circle {
+    left: 21%;
+    width: 35%;
+  }
+
+  .collection-sketch {
+    left: 55%;
+    width: 25%;
+  }
+
+  .boat-composition {
+    left: 1%;
+    width: 87%;
+  }
+
+  .palms {
+    left: 1%;
+    width: 34%;
+  }
+
+  .temple {
+    left: 2%;
+    width: 43%;
+  }
+
+  .journey-circle {
+    left: 5%;
+    width: 34%;
+  }
+
+  .blue-circle {
+    left: 3%;
+    width: 48%;
+  }
+
+  .edition-card {
+    left: 7%;
+    width: 150px;
+  }
+
+  .about-section,
+  .booking-section {
+    margin-right: 0;
+  }
 
   .booking-section {
     flex-direction: column;
-
     align-items: flex-start;
   }
-
 }
