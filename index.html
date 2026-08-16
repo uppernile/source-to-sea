@@ -8,7 +8,7 @@
 
   <meta
     name="description"
-    content="Source to Sea. Private journeys shaped by the Upper Nile."
+    content="Source to Sea. A collection of private journeys along the Upper Nile."
   >
 
   <link rel="stylesheet" href="style.css">
@@ -18,221 +18,320 @@
 
   <header class="site-header">
 
-    <a class="brand" href="/">
+    <a class="brand" href="#top" aria-label="Source to Sea home">
       <span>SOURCE</span>
       <span>TO</span>
       <span>SEA</span>
-
       <span class="brand-mark" aria-hidden="true"></span>
     </a>
 
-    <nav class="main-nav">
-      <a href="#boats">BOATS</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="#collection">BOATS</a>
       <a href="#journeys">JOURNEYS</a>
       <a href="#editions">EDITIONS</a>
-      <a href="#stories">STORIES</a>
       <a href="#about">ABOUT</a>
-      <a class="booking-nav" href="#booking">
-        AGENT BOOKING →
-      </a>
+      <a class="booking-nav" href="#booking">AGENT BOOKING →</a>
     </nav>
 
   </header>
 
 
-  <main>
+  <main id="top">
 
-    <section class="river-page">
+    <section class="story-shell">
 
-      <!-- CONTINUOUS NILE -->
+      <!-- LEFT: SCROLLING NILE STORY -->
+      <div class="story-scroll">
 
-      <div class="nile-layer" aria-hidden="true">
-        <img
-          src="nile-watercolor.png"
-          alt=""
-          class="nile-image"
-        >
+        <!-- Continuous Nile: never stretched -->
+        <div class="river-spine" aria-hidden="true">
+          <img
+            src="nile-watercolor.png"
+            alt=""
+            class="river-image"
+          >
+        </div>
+
+
+        <!-- COLLECTION -->
+        <section id="collection" class="chapter collection-chapter">
+
+          <div class="chapter-number">01 /</div>
+
+          <div class="aswan-marker map-marker">
+            <span>ASWAN</span>
+            <i></i>
+          </div>
+
+          <img
+            src="terracotta-circle.png"
+            alt=""
+            class="asset collection-circle"
+            aria-hidden="true"
+          >
+
+          <img
+            src="dehabiya-sketch.png"
+            alt=""
+            class="asset collection-sketch"
+            aria-hidden="true"
+          >
+
+          <div class="boat-composition">
+
+            <img
+              src="dehabiya-water.png"
+              alt=""
+              class="asset boat-water"
+              aria-hidden="true"
+            >
+
+            <img
+              src="dehabiya-main.png"
+              alt="Traditional Egyptian dahabiya"
+              class="asset boat-main"
+            >
+
+          </div>
+
+          <div class="collection-copy editorial-copy">
+
+            <p class="eyebrow">THE COLLECTION</p>
+
+            <span class="small-rust-line"></span>
+
+            <h2>RAZIS</h2>
+
+            <p class="micro">BUILT IN ESNA</p>
+
+            <a href="#journeys" class="editorial-link">
+              EXPLORE BOATS <span>→</span>
+            </a>
+
+          </div>
+
+        </section>
+
+
+        <!-- JOURNEYS -->
+        <section id="journeys" class="chapter journeys-chapter">
+
+          <div class="chapter-number">02 /</div>
+
+          <img
+            src="terracotta-circle.png"
+            alt=""
+            class="asset journey-circle"
+            aria-hidden="true"
+          >
+
+          <img
+            src="date-palms-sketch.png"
+            alt=""
+            class="asset palms"
+            aria-hidden="true"
+          >
+
+          <img
+            src="temple-ruins.png"
+            alt="Ancient Egyptian temple ruins"
+            class="asset temple"
+          >
+
+          <img
+            src="nile-bird.png"
+            alt=""
+            class="asset journey-bird"
+            aria-hidden="true"
+          >
+
+          <div class="esna-marker map-marker">
+            <i></i>
+            <span>ESNA</span>
+          </div>
+
+          <div class="journeys-copy editorial-copy">
+
+            <p class="eyebrow">JOURNEYS</p>
+
+            <span class="small-rust-line"></span>
+
+            <h2>
+              The River.<br>
+              The Journey.<br>
+              The Connection.
+            </h2>
+
+            <p>
+              Private journeys between Aswan and Esna, shaped by the river rather
+              than a rigid itinerary.
+            </p>
+
+            <a href="#editions" class="editorial-link">
+              EXPLORE JOURNEYS <span>→</span>
+            </a>
+
+          </div>
+
+        </section>
+
+
+        <!-- EDITIONS -->
+        <section id="editions" class="chapter editions-chapter">
+
+          <div class="chapter-number">03 /</div>
+
+          <img
+            src="blue-paper-circle.png"
+            alt=""
+            class="asset blue-circle"
+            aria-hidden="true"
+          >
+
+          <img
+            src="terracotta-circle.png"
+            alt=""
+            class="asset editions-circle"
+            aria-hidden="true"
+          >
+
+          <div class="edition-card" aria-hidden="true">
+            <span>EDITION / 01</span>
+            <strong>ARTISTS<br>ON THE NILE</strong>
+            <small>WINTER 2027</small>
+            <b class="mini-mark"></b>
+          </div>
+
+          <div class="editions-copy editorial-copy">
+
+            <p class="eyebrow">EDITIONS</p>
+
+            <span class="small-rust-line"></span>
+
+            <h2>
+              Seasonal editions.<br>
+              Artists on the Nile.<br>
+              New perspectives.
+            </h2>
+
+            <p>
+              Art, craft and changing collaborations that expand the collection
+              beyond the boats themselves.
+            </p>
+
+            <a href="#story-close" class="editorial-link">
+              DISCOVER EDITIONS <span>→</span>
+            </a>
+
+          </div>
+
+          <img
+            src="nile-bird.png"
+            alt=""
+            class="asset editions-bird"
+            aria-hidden="true"
+          >
+
+        </section>
+
+
+        <!-- CLOSING -->
+        <section id="story-close" class="chapter closing-chapter">
+
+          <div class="from-source">
+            <span>From source<br>to sea.</span>
+            <b class="mini-mark"></b>
+          </div>
+
+          <div class="closing-message">
+            <p>The Nile connects more than places.</p>
+            <p>It connects people, craft and stories.</p>
+            <span class="rust-line"></span>
+          </div>
+
+        </section>
+
       </div>
 
 
-      <!-- OPENING -->
+      <!-- RIGHT: FIXED EDITORIAL PANEL -->
+      <aside class="fixed-panel">
 
-      <section class="hero">
+        <div class="panel-inner">
 
-        <div class="hero-copy">
+          <p class="panel-kicker">SOURCE TO SEA</p>
 
-          <h1>
-            Journeys<br>
-            shaped by<br>
-            the Upper Nile.
-          </h1>
+          <div class="panel-main">
 
-          <span class="rust-line"></span>
+            <p class="panel-overline">UPPER NILE COLLECTION</p>
 
-          <p class="caps">
-            DISTINCTIVE BOATS.<br>
-            MEANINGFUL CONNECTIONS.<br>
-            CURATED EXPERIENCES.
+            <h1>
+              A collection<br>
+              shaped along<br>
+              the river.
+            </h1>
+
+            <span class="rust-line"></span>
+
+            <p class="panel-intro">
+              DISTINCTIVE BOATS.<br>
+              MEANINGFUL CONNECTIONS.<br>
+              CURATED EXPERIENCES.
+            </p>
+
+          </div>
+
+          <div class="panel-index">
+            <a href="#collection"><span>01</span> COLLECTION</a>
+            <a href="#journeys"><span>02</span> JOURNEYS</a>
+            <a href="#editions"><span>03</span> EDITIONS</a>
+          </div>
+
+          <p class="panel-note">
+            Sailing between Aswan and Esna.<br>
+            Where time follows the river.
           </p>
 
         </div>
 
-
-        <div class="map-label aswan">
-          <span>ASWAN</span>
-          <span class="map-line"></span>
-          <span class="map-dot"></span>
-        </div>
-
-
-        <div id="boats" class="collection-copy">
-
-          <p class="eyebrow">THE COLLECTION</p>
-
-          <span class="small-rust-line"></span>
-
-          <p class="collection-number">01 /</p>
-
-          <h2>RAZIS</h2>
-
-          <p class="caps small">BUILT IN ESNA</p>
-
-        </div>
-
-      </section>
-
-
-      <!-- HANDWRITTEN MOMENT -->
-
-      <section class="river-note">
-
-        <p>
-          Sailing between<br>
-          Aswan and Esna.<br>
-          Where time<br>
-          follows the river.
-        </p>
-
-        <span class="rust-line short"></span>
-
-      </section>
-
-
-      <!-- JOURNEYS -->
-
-      <section id="journeys" class="journeys-copy">
-
-        <p class="eyebrow">JOURNEYS</p>
-
-        <span class="small-rust-line"></span>
-
-        <h2>
-          The River.<br>
-          The Journey.<br>
-          The Connection.
-        </h2>
-
-        <a href="#booking" class="editorial-link">
-          EXPLORE JOURNEYS <span>→</span>
-        </a>
-
-      </section>
-
-
-      <div class="map-label esna">
-        <span class="map-dot"></span>
-        <span class="map-line reverse"></span>
-        <span>ESNA</span>
-      </div>
-
-
-      <!-- LOWER RIVER -->
-
-      <section id="editions" class="editions-copy">
-
-        <p class="eyebrow">EDITIONS</p>
-
-        <span class="small-rust-line"></span>
-
-        <h2>
-          Seasonal editions.<br>
-          Artists on the Nile.<br>
-          New perspectives.
-        </h2>
-
-        <a href="#" class="editorial-link">
-          DISCOVER EDITIONS <span>→</span>
-        </a>
-
-      </section>
-
-
-      <div class="map-label luxor">
-        <span>LUXOR</span>
-        <span class="map-line"></span>
-        <span class="map-dot"></span>
-      </div>
-
-
-      <!-- CLOSING -->
-
-      <section class="source-close">
-
-        <p>
-          From source<br>
-          to sea.
-        </p>
-
-        <span class="brand-mark small-mark"></span>
-
-      </section>
-
-
-      <section id="stories" class="closing-note">
-
-        <p>
-          The Nile connects<br>
-          more than places.<br>
-          It connects people,<br>
-          craft, and stories.
-        </p>
-
-        <span class="rust-line"></span>
-
-      </section>
+      </aside>
 
     </section>
 
 
-    <!-- BOOKING -->
+    <!-- OFF THE NILE -->
+
+    <section id="about" class="about-section">
+
+      <p class="eyebrow">ABOUT</p>
+
+      <h2>Upper Nile Collection</h2>
+
+      <p>
+        This quieter section comes after the visual journey and can hold the
+        collection story, philosophy and people behind it.
+      </p>
+
+    </section>
+
 
     <section id="booking" class="booking-section">
 
-      <div class="booking-copy">
+      <div>
 
         <p class="eyebrow">FOR TRAVEL PARTNERS</p>
 
         <h2>Plan a journey.</h2>
 
         <p>
-          Private whole-boat charters between
-          Aswan, Esna and Luxor.
+          View availability, direction and trade access.
         </p>
 
       </div>
 
       <a href="#" class="booking-button">
-        CHECK AVAILABILITY →
+        AGENT ACCESS →
       </a>
-
-    </section>
-
-
-    <section id="about" class="about-section">
-
-      <p>
-        SOURCE TO SEA
-      </p>
 
     </section>
 
