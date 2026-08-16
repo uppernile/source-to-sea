@@ -7,7 +7,7 @@
 <style>
 :root{
   --paper:#f4efe7; --ink:#171512; --rust:#a84b28;
-  --left:64vw; --right:36vw;
+  --left:60vw; --right:40vw;
   --serif:Georgia,"Times New Roman",serif;
   --sans:Arial,Helvetica,sans-serif;
 }
@@ -52,12 +52,18 @@ nav a:last-child{border-bottom:1px solid var(--rust);padding-bottom:8px}
 /* LEFT SCROLLING RIVER */
 .story{width:var(--left);position:relative;background:var(--paper)}
 .river-spine{
- position:absolute;z-index:2;right:-18px;top:0;width:190px;height:100%;
+ position:fixed;
+ z-index:55;
+ left:60vw;
+ top:50%;
+ width:205px;
+ height:112vh;
+ transform:translate(-50%,-50%);
  background-image:url("nile-watercolor.png");
- background-repeat:repeat-y;
- background-position:center top;
- background-size:175px auto;
- pointer-events:none
+ background-repeat:no-repeat;
+ background-position:center center;
+ background-size:contain;
+ pointer-events:none;
 }
 .scene{position:relative;height:610px;overflow:hidden}
 .scene-label{
@@ -79,7 +85,7 @@ nav a:last-child{border-bottom:1px solid var(--rust);padding-bottom:8px}
 }
 
 /* COLLECTION: compact layered collage */
-.collection{height:650px}
+.collection{height:720px}
 .collection-circle{z-index:4;width:175px;left:275px;top:170px}
 .collection-sketch{z-index:7;width:135px;left:425px;top:155px;opacity:.68}
 .boat-water{z-index:8;width:420px;left:115px;top:402px;opacity:.8}
@@ -89,26 +95,26 @@ nav a:last-child{border-bottom:1px solid var(--rust);padding-bottom:8px}
 .micro{font:11px var(--sans)!important;letter-spacing:.17em}
 
 /* JOURNEYS */
-.journeys{height:625px}
-.journey-circle{z-index:3;width:150px;left:100px;top:210px}
-.palms{z-index:7;width:185px;left:55px;top:125px;opacity:.9}
-.temple{z-index:8;width:210px;left:55px;top:370px}
-.bird{z-index:11;width:130px;left:390px;top:100px}
-.journeys .copy{left:300px;top:245px;width:265px}
+.journeys{height:710px}
+.journey-circle{z-index:3;width:150px;left:100px;top:245px}
+.palms{z-index:7;width:185px;left:55px;top:160px;opacity:.9}
+.temple{z-index:8;width:210px;left:55px;top:410px}
+.bird{z-index:11;width:130px;left:390px;top:135px}
+.journeys .copy{left:300px;top:285px;width:265px}
 .journeys .copy h2{font-size:36px}
 
 /* EDITIONS */
-.editions{height:640px}
-.bluecircle{z-index:3;width:205px;left:60px;top:135px}
-.rustcircle{z-index:4;width:120px;left:240px;top:355px}
+.editions{height:720px}
+.bluecircle{z-index:3;width:205px;left:60px;top:180px}
+.rustcircle{z-index:4;width:120px;left:240px;top:400px}
 .edition-card{
- position:absolute;z-index:10;width:125px;height:175px;left:220px;top:335px;
+ position:absolute;z-index:10;width:125px;height:175px;left:220px;top:380px;
  background:#d8bd95;padding:18px 12px;text-align:center;transform:rotate(1.5deg)
 }
 .edition-card span,.edition-card small{display:block;font:9px var(--sans);letter-spacing:.15em}
 .edition-card strong{display:block;margin:25px 0 20px;font-size:14px;line-height:1.25;letter-spacing:.08em;font-weight:400}
-.editions .bird{width:145px;left:425px;top:395px;transform:scaleX(-1);opacity:.82}
-.editions .copy{left:340px;top:145px;width:230px}
+.editions .bird{width:145px;left:425px;top:440px;transform:scaleX(-1);opacity:.82}
+.editions .copy{left:340px;top:190px;width:230px}
 .editions .copy h2{font-size:33px}
 
 /* CLOSING */
@@ -135,7 +141,7 @@ nav a:last-child{border-bottom:1px solid var(--rust);padding-bottom:8px}
  .panel{position:relative;width:100%;height:700px;padding:115px 8vw 55px}
  .panel-index,.note{left:8vw}
  .story,.after{width:100%}
- .river-spine{right:-30px}
+ .river-spine{left:auto;right:-55px;transform:translateY(-50%);width:170px}
 }
 </style>
 </head>
