@@ -1,27 +1,23 @@
 /* =========================================================
-   SOURCE TO SEA / UPPER NILE
-   Concept build
-   Fixed editorial panel + scrolling Nile story
+   SOURCE TO SEA / VERSION 3
+   Fixed right panel + contained scrolling scenes
    ========================================================= */
 
 :root {
   --paper: #f3eee5;
-  --paper-deep: #e8dfd1;
+  --paper-soft: #ebe3d7;
   --ink: #171512;
-  --muted: #625d55;
-  --rust: #a84824;
-  --blue: #1f5d7b;
-  --rule: rgba(23, 21, 18, 0.22);
+  --rust: #a74824;
+  --line: rgba(23, 21, 18, 0.22);
 
-  --header-h: 76px;
-  --panel-w: 34vw;
-  --story-w: 66vw;
+  --story-width: 64vw;
+  --panel-width: 36vw;
 
-  --serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
-  --sans: "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Arial, Helvetica, sans-serif;
 }
 
-/* ---------- RESET ---------- */
+/* RESET */
 
 * {
   box-sizing: border-box;
@@ -33,8 +29,8 @@ html {
 
 body {
   margin: 0;
-  color: var(--ink);
   background: var(--paper);
+  color: var(--ink);
   font-family: var(--serif);
   overflow-x: hidden;
 }
@@ -49,102 +45,90 @@ a {
   text-decoration: none;
 }
 
-/* ---------- HEADER ---------- */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .site-header {
   position: fixed;
-  z-index: 100;
+  z-index: 1000;
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--header-h);
-  padding: 18px 3vw;
+  padding: 28px 3vw 0;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: flex-start;
   pointer-events: none;
 }
 
-.brand,
-.main-nav {
+.site-header a {
   pointer-events: auto;
 }
 
 .brand {
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 0 5px;
-  width: 74px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   font-family: var(--sans);
-  font-size: 8px;
-  line-height: 1.1;
+  font-size: 10px;
+  line-height: 1;
   letter-spacing: 0.28em;
-  font-weight: 600;
-}
-
-.brand span:nth-child(1),
-.brand span:nth-child(3) {
-  grid-column: 1;
-}
-
-.brand span:nth-child(2) {
-  grid-column: 1;
 }
 
 .brand-mark {
-  grid-column: 2;
-  grid-row: 2 / span 2;
-  width: 18px;
-  height: 18px;
-  margin-top: -2px;
+  position: absolute;
+  left: 67px;
+  top: 11px;
+  width: 30px;
+  height: 30px;
   border: 2px solid var(--rust);
   border-right-color: transparent;
   border-radius: 50%;
+  transform: rotate(10deg);
 }
 
 .main-nav {
   display: flex;
-  align-items: center;
-  gap: 23px;
+  gap: 25px;
+  padding-top: 3px;
   font-family: var(--sans);
-  font-size: 7px;
-  letter-spacing: 0.19em;
-  font-weight: 600;
+  font-size: 8px;
+  letter-spacing: 0.16em;
 }
 
 .booking-nav {
-  padding-bottom: 5px;
+  padding-bottom: 7px;
   border-bottom: 1px solid var(--rust);
 }
 
-/* ---------- MAIN STORY STRUCTURE ---------- */
+/* =========================================================
+   STORY SHELL
+   ========================================================= */
 
 .story-shell {
   position: relative;
   min-height: 100vh;
-  background: var(--paper);
 }
 
-.story-scroll {
-  position: relative;
-  width: var(--story-w);
-  min-height: 430vh;
+.story-column {
+  width: var(--story-width);
   background:
-    radial-gradient(circle at 20% 15%, rgba(255,255,255,0.35), transparent 25%),
+    radial-gradient(circle at 28% 12%, rgba(255,255,255,0.42), transparent 28%),
     var(--paper);
-  overflow: hidden;
 }
 
 .fixed-panel {
   position: fixed;
-  z-index: 20;
+  z-index: 50;
   top: 0;
   right: 0;
-  width: var(--panel-w);
+  width: var(--panel-width);
   height: 100vh;
-  padding: 110px 4.5vw 48px;
-  background: rgba(243, 238, 229, 0.96);
-  border-left: 1px solid rgba(23, 21, 18, 0.08);
+  padding: 12vh 4.8vw 7vh;
+  background: rgba(243, 238, 229, 0.97);
+  border-left: 1px solid rgba(23,21,18,0.08);
 }
 
 .panel-inner {
@@ -156,334 +140,383 @@ a {
 .panel-kicker,
 .panel-overline,
 .eyebrow,
-.micro {
-  margin: 0;
+.micro,
+.scene-label,
+.panel-index,
+.editorial-link {
   font-family: var(--sans);
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.18em;
 }
 
 .panel-kicker {
-  margin-bottom: auto;
+  margin: 0 0 11vh;
+  font-size: 8px;
   color: var(--rust);
 }
 
-.panel-main {
-  margin: auto 0;
-}
-
 .panel-overline {
-  margin-bottom: 20px;
+  margin: 0 0 20px;
+  font-size: 8px;
 }
 
 .panel-main h1 {
   margin: 0;
-  max-width: 390px;
-  font-size: clamp(38px, 4.2vw, 70px);
-  line-height: 0.94;
+  font-size: clamp(40px, 4.4vw, 72px);
+  line-height: 0.96;
   font-weight: 400;
   letter-spacing: -0.035em;
-}
-
-.rust-line,
-.small-rust-line {
-  display: block;
-  background: var(--rust);
-}
-
-.rust-line {
-  width: 36px;
-  height: 2px;
-  margin: 27px 0;
-}
-
-.small-rust-line {
-  width: 23px;
-  height: 1px;
-  margin: 13px 0 17px;
 }
 
 .panel-intro {
   margin: 0;
   font-family: var(--sans);
   font-size: 8px;
-  line-height: 1.8;
+  line-height: 1.9;
   letter-spacing: 0.18em;
 }
 
+.rust-line {
+  display: block;
+  width: 52px;
+  height: 2px;
+  margin: 28px 0;
+  background: var(--rust);
+}
+
+.small-rust-line {
+  display: block;
+  width: 22px;
+  height: 1px;
+  margin: 12px 0 18px;
+  background: var(--rust);
+}
+
 .panel-index {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 10px;
-  margin-bottom: 30px;
-  font-family: var(--sans);
-  font-size: 7px;
-  letter-spacing: 0.18em;
+  margin-top: auto;
+  font-size: 8px;
 }
 
 .panel-index span {
   display: inline-block;
-  width: 27px;
+  width: 28px;
   color: var(--rust);
 }
 
 .panel-note {
-  margin: 0;
-  font-style: italic;
-  font-size: 13px;
+  margin: 28px 0 0;
+  font-size: 15px;
   line-height: 1.45;
+  font-style: italic;
 }
 
-/* ---------- THE RIVER ---------- */
+/* =========================================================
+   SCENES
+   ========================================================= */
 
-/*
-   IMPORTANT:
-   The watercolor is NEVER forced to a fixed height.
-   Its original aspect ratio is preserved with height:auto.
-*/
+.scene {
+  position: relative;
+  min-height: 110vh;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
 
-.river-spine {
+.scene + .scene {
+  margin-top: -8vh;
+}
+
+.scene-river {
   position: absolute;
   z-index: 1;
-  top: 1.5vh;
   left: 50%;
-  width: min(27vw, 420px);
+  width: min(31vw, 430px);
   transform: translateX(-50%);
   pointer-events: none;
 }
 
-.river-image {
+.scene-river img {
   width: 100%;
   height: auto;
   object-fit: contain;
-  object-position: top center;
 }
 
-/* ---------- CHAPTERS ---------- */
+/*
+  Each river segment remains proportional.
+  Slight overlaps between scenes create continuity.
+*/
 
-.chapter {
-  position: relative;
-  z-index: 2;
-  min-height: 105vh;
-  padding: 12vh 4vw 8vh;
+.river-a {
+  top: -3vh;
 }
 
-.chapter-number {
+.river-b {
+  top: -15vh;
+}
+
+.river-c {
+  top: -18vh;
+}
+
+.river-d {
+  top: -22vh;
+}
+
+.scene-label {
+  position: absolute;
+  z-index: 20;
+  top: 12vh;
+  left: 4vw;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 8px;
+}
+
+.scene-label span {
+  color: var(--rust);
+  font-family: var(--serif);
+  font-size: 24px;
+  letter-spacing: 0.08em;
+}
+
+.scene-label strong {
+  font-weight: 400;
+}
+
+.scene-asset {
   position: absolute;
   z-index: 5;
-  top: 13vh;
-  left: 4vw;
-  color: var(--rust);
-  font-size: 23px;
-  letter-spacing: 0.1em;
-}
-
-.asset {
-  position: absolute;
-  z-index: 3;
   pointer-events: none;
 }
 
-.editorial-copy {
+.scene-copy {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
 }
 
-.editorial-copy h2 {
+.scene-copy h2 {
   margin: 0;
-  font-size: clamp(32px, 3.2vw, 55px);
-  line-height: 0.98;
+  font-size: clamp(32px, 3.1vw, 54px);
+  line-height: 1.05;
   font-weight: 400;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 
-.editorial-copy > p:not(.eyebrow):not(.micro) {
-  max-width: 300px;
-  margin: 22px 0;
+.scene-copy > p:not(.eyebrow):not(.micro) {
+  max-width: 290px;
+  margin: 22px 0 0;
   font-size: 14px;
   line-height: 1.55;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 8px;
+}
+
+.micro {
+  margin: 9px 0 0;
+  font-size: 8px;
 }
 
 .editorial-link {
   display: inline-flex;
   gap: 42px;
-  align-items: center;
-  margin-top: 25px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--ink);
-  font-family: var(--sans);
-  font-size: 7px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  margin-top: 27px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+  font-size: 8px;
 }
+
+/* =========================================================
+   MAP MARKERS
+   ========================================================= */
 
 .map-marker {
   position: absolute;
-  z-index: 7;
+  z-index: 25;
   display: flex;
   align-items: center;
-  gap: 11px;
-  font-family: var(--sans);
-  font-size: 7px;
-  letter-spacing: 0.18em;
+  gap: 9px;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
 }
 
 .map-marker i {
-  display: block;
-  width: 6px;
-  height: 6px;
+  position: relative;
+  width: 56px;
+  height: 1px;
   background: var(--rust);
+  transform: rotate(28deg);
+}
+
+.map-marker i::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
+  background: var(--rust);
 }
 
-/* ---------- COLLECTION ---------- */
-
-.collection-chapter {
-  min-height: 112vh;
+.marker-aswan {
+  top: 18vh;
+  left: 29%;
 }
 
-.aswan-marker {
-  top: 19vh;
-  left: 40%;
+.marker-esna {
+  top: 66vh;
+  left: 39%;
+}
+
+.marker-esna i {
+  transform: rotate(-30deg);
+}
+
+/* =========================================================
+   COLLECTION
+   ========================================================= */
+
+.scene-collection {
+  min-height: 118vh;
 }
 
 .collection-circle {
   z-index: 2;
-  top: 23vh;
-  left: 27%;
-  width: 28%;
+  top: 18vh;
+  right: 4%;
+  width: 29%;
 }
 
 .collection-sketch {
-  z-index: 4;
-  top: 14vh;
-  left: 51%;
+  z-index: 6;
+  top: 16vh;
+  right: 1%;
   width: 18%;
-  opacity: 0.67;
+  opacity: 0.72;
 }
 
-.boat-composition {
+.boat-group {
   position: absolute;
-  z-index: 6;
-  top: 35vh;
-  left: 7%;
-  width: 72%;
-  height: 48vh;
+  z-index: 10;
+  left: 6%;
+  top: 34vh;
+  width: 80%;
+  height: 49vh;
 }
 
 .boat-main {
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   left: 0;
   bottom: 10%;
   width: 100%;
   height: auto;
-  object-fit: contain;
 }
 
 .boat-water {
   position: absolute;
-  z-index: 2;
-  left: 5%;
+  z-index: 1;
+  left: 8%;
   bottom: 0;
-  width: 90%;
+  width: 84%;
   height: auto;
-  opacity: 0.82;
+  opacity: 0.76;
 }
 
 .collection-copy {
   top: 20vh;
-  right: 4vw;
-  width: 21%;
+  right: 4%;
+  width: 24%;
 }
 
 .collection-copy h2 {
-  font-size: clamp(28px, 3vw, 48px);
+  font-size: clamp(30px, 3vw, 48px);
+  letter-spacing: 0.08em;
 }
 
-.collection-copy .micro {
-  margin-top: 8px;
-}
+/* =========================================================
+   JOURNEYS
+   ========================================================= */
 
-/* ---------- JOURNEYS ---------- */
-
-.journeys-chapter {
-  min-height: 110vh;
+.scene-journeys {
+  min-height: 122vh;
 }
 
 .journey-circle {
-  top: 17vh;
-  left: 10%;
+  z-index: 2;
+  top: 21vh;
+  left: 8%;
   width: 27%;
 }
 
-.palms {
-  z-index: 6;
-  top: 9vh;
+.journey-palms {
+  z-index: 8;
+  top: 10vh;
+  left: 2%;
+  width: 33%;
+  opacity: 0.9;
+}
+
+.journey-temple {
+  z-index: 7;
   left: 5%;
-  width: 27%;
-  opacity: 0.86;
-}
-
-.temple {
-  z-index: 5;
-  left: 7%;
-  bottom: 7vh;
-  width: 37%;
+  bottom: 8vh;
+  width: 38%;
 }
 
 .journey-bird {
-  z-index: 8;
+  z-index: 12;
   top: 17vh;
-  left: 37%;
-  width: 21%;
-  transform: rotate(-4deg);
-}
-
-.esna-marker {
-  top: 58%;
-  left: 46%;
+  right: 5%;
+  width: 23%;
+  transform: rotate(-5deg);
 }
 
 .journeys-copy {
-  top: 35vh;
-  right: 3.5vw;
-  width: 34%;
+  top: 39vh;
+  right: 3%;
+  width: 36%;
 }
 
-/* ---------- EDITIONS ---------- */
+/* =========================================================
+   EDITIONS
+   ========================================================= */
 
-.editions-chapter {
-  min-height: 108vh;
+.scene-editions {
+  min-height: 118vh;
 }
 
-.blue-circle {
+.editions-blue-circle {
   z-index: 2;
-  top: 13vh;
-  left: 7%;
-  width: 41%;
+  top: 17vh;
+  left: 5%;
+  width: 42%;
 }
 
-.editions-circle {
+.editions-rust-circle {
   z-index: 3;
-  top: 33vh;
-  left: 31%;
-  width: 20%;
-  opacity: 0.9;
+  top: 48vh;
+  left: 34%;
+  width: 24%;
 }
 
 .edition-card {
   position: absolute;
-  z-index: 8;
-  top: 31vh;
-  left: 13%;
-  width: 180px;
-  min-height: 220px;
-  padding: 24px 20px;
-  background: rgba(243, 238, 229, 0.91);
-  transform: rotate(-2deg);
-  box-shadow: 0 8px 30px rgba(23, 21, 18, 0.07);
+  z-index: 9;
+  top: 53vh;
+  left: 34%;
+  width: 170px;
+  min-height: 230px;
+  padding: 24px 20px 20px;
+  background: #d6bb93;
+  box-shadow: 0 10px 25px rgba(23,21,18,0.08);
+  transform: rotate(2deg);
+  text-align: center;
 }
 
 .edition-card span,
@@ -491,107 +524,118 @@ a {
   display: block;
   font-family: var(--sans);
   font-size: 7px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.17em;
 }
 
 .edition-card strong {
   display: block;
-  margin: 38px 0;
-  font-size: 19px;
-  line-height: 1.15;
+  margin: 36px 0 28px;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: 0.11em;
   font-weight: 400;
 }
 
 .mini-mark {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin-top: 20px;
+  display: inline-block;
+  width: 38px;
+  height: 38px;
+  margin-top: 17px;
   border: 2px solid var(--rust);
   border-right-color: transparent;
   border-radius: 50%;
+  transform: rotate(10deg);
 }
 
 .editions-copy {
-  top: 25vh;
-  right: 3.5vw;
+  top: 34vh;
+  right: 4%;
   width: 34%;
 }
 
 .editions-bird {
-  z-index: 7;
-  right: 5%;
+  z-index: 11;
+  right: 1%;
   bottom: 10vh;
-  width: 23%;
-  opacity: 0.72;
+  width: 22%;
   transform: scaleX(-1) rotate(-5deg);
+  opacity: 0.78;
 }
 
-/* ---------- CLOSE OF NILE ---------- */
+/* =========================================================
+   CLOSING
+   ========================================================= */
 
-.closing-chapter {
-  min-height: 100vh;
+.scene-close {
+  min-height: 96vh;
 }
 
 .from-source {
   position: absolute;
-  left: 6%;
-  bottom: 16vh;
+  z-index: 20;
+  left: 5%;
+  bottom: 14vh;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
   font-size: 25px;
-  line-height: 1.05;
+  line-height: 1.1;
 }
 
-.closing-message {
+.closing-copy {
   position: absolute;
+  z-index: 20;
   right: 5%;
-  bottom: 17vh;
-  width: 31%;
+  bottom: 14vh;
+  width: 34%;
   font-size: 20px;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
-.closing-message p {
+.closing-copy p {
   margin: 0 0 7px;
 }
 
-/* ---------- AFTER THE NILE ---------- */
+/* =========================================================
+   OFF-RIVER SECTIONS
+   ========================================================= */
 
 .about-section,
 .booking-section {
   position: relative;
-  z-index: 30;
-  margin-right: var(--panel-w);
+  z-index: 80;
+  width: var(--story-width);
 }
 
 .about-section {
-  min-height: 70vh;
-  padding: 14vh 8vw;
-  background: var(--paper-deep);
+  min-height: 64vh;
+  padding: 12vh 8vw;
+  background: var(--paper-soft);
 }
 
 .about-section h2,
 .booking-section h2 {
-  margin: 17px 0;
-  font-size: clamp(40px, 5vw, 75px);
-  line-height: 0.95;
+  margin: 14px 0 20px;
+  font-size: clamp(42px, 5vw, 74px);
+  line-height: 0.96;
   font-weight: 400;
 }
 
 .about-section > p:last-child {
-  max-width: 580px;
-  font-size: 18px;
-  line-height: 1.55;
+  max-width: 590px;
+  font-size: 17px;
+  line-height: 1.65;
 }
 
 .booking-section {
-  min-height: 42vh;
+  min-height: 45vh;
   padding: 10vh 8vw;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 60px;
-  color: #f2eee6;
   background: #171a18;
+  color: #f4efe7;
 }
 
 .booking-section p {
@@ -599,66 +643,27 @@ a {
 }
 
 .booking-button {
-  flex: 0 0 auto;
-  padding: 15px 22px;
-  border: 1px solid rgba(242, 238, 230, 0.45);
+  flex: none;
+  padding: 16px 24px;
+  border: 1px solid rgba(244,239,231,0.5);
   font-family: var(--sans);
   font-size: 8px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.17em;
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
 
   :root {
-    --panel-w: 38vw;
-    --story-w: 62vw;
+    --story-width: 100vw;
+    --panel-width: 100vw;
   }
 
   .main-nav {
-    gap: 12px;
-  }
-
-  .main-nav a:not(.booking-nav) {
     display: none;
-  }
-
-  .river-spine {
-    width: 31vw;
-  }
-
-  .collection-copy,
-  .journeys-copy,
-  .editions-copy {
-    right: 2.5vw;
-  }
-
-  .boat-composition {
-    left: 2%;
-    width: 82%;
-  }
-}
-
-@media (max-width: 760px) {
-
-  :root {
-    --panel-w: 100%;
-    --story-w: 100%;
-  }
-
-  .site-header {
-    position: absolute;
-    padding: 18px 22px;
-  }
-
-  .fixed-panel {
-    position: relative;
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
-    padding: 120px 28px 45px;
-    border-left: 0;
   }
 
   .story-shell {
@@ -667,83 +672,147 @@ a {
   }
 
   .fixed-panel {
+    position: relative;
     order: 1;
+    width: 100%;
+    height: auto;
+    min-height: 90vh;
+    padding: 120px 7vw 50px;
+    border-left: 0;
   }
 
-  .story-scroll {
+  .story-column {
     order: 2;
     width: 100%;
   }
 
-  .river-spine {
-    left: 50%;
-    width: 46vw;
+  .scene-river {
+    width: 44vw;
   }
 
-  .chapter {
-    min-height: 105vh;
-    padding-left: 25px;
-    padding-right: 25px;
+  .collection-circle {
+    right: 8%;
+    width: 34%;
   }
 
-  .chapter-number {
-    left: 25px;
+  .collection-sketch {
+    right: 2%;
+    width: 24%;
+  }
+
+  .boat-group {
+    left: 2%;
+    width: 91%;
   }
 
   .collection-copy,
   .journeys-copy,
   .editions-copy {
-    right: 25px;
-    width: 39%;
+    right: 5%;
+    width: 40%;
   }
 
-  .collection-circle {
-    left: 21%;
-    width: 35%;
+  .journey-palms {
+    width: 38%;
   }
 
-  .collection-sketch {
-    left: 55%;
-    width: 25%;
+  .journey-temple {
+    width: 44%;
   }
 
-  .boat-composition {
-    left: 1%;
-    width: 87%;
-  }
-
-  .palms {
-    left: 1%;
-    width: 34%;
-  }
-
-  .temple {
-    left: 2%;
-    width: 43%;
-  }
-
-  .journey-circle {
-    left: 5%;
-    width: 34%;
-  }
-
-  .blue-circle {
-    left: 3%;
-    width: 48%;
-  }
-
-  .edition-card {
-    left: 7%;
-    width: 150px;
+  .editions-blue-circle {
+    width: 50%;
   }
 
   .about-section,
   .booking-section {
-    margin-right: 0;
+    width: 100%;
   }
 
   .booking-section {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+
+  .site-header {
+    position: absolute;
+  }
+
+  .fixed-panel {
+    min-height: 100vh;
+  }
+
+  .panel-main h1 {
+    font-size: 48px;
+  }
+
+  .scene {
+    min-height: 110vh;
+  }
+
+  .scene-river {
+    width: 54vw;
+  }
+
+  .scene-label {
+    left: 24px;
+  }
+
+  .marker-aswan {
+    left: 24%;
+  }
+
+  .collection-circle {
+    top: 22vh;
+    width: 38%;
+  }
+
+  .collection-sketch {
+    top: 21vh;
+    width: 29%;
+  }
+
+  .boat-group {
+    top: 39vh;
+    width: 96%;
+  }
+
+  .collection-copy {
+    top: 17vh;
+    width: 35%;
+  }
+
+  .journey-palms {
+    width: 43%;
+  }
+
+  .journey-circle {
+    width: 35%;
+  }
+
+  .journey-temple {
+    width: 49%;
+  }
+
+  .journey-bird {
+    width: 28%;
+  }
+
+  .journeys-copy,
+  .editions-copy {
+    right: 24px;
+    width: 43%;
+  }
+
+  .edition-card {
+    left: 19%;
+    width: 150px;
+  }
+
+  .closing-copy {
+    width: 45%;
   }
 }
