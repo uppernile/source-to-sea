@@ -1,9 +1,25 @@
+/* =========================================================
+   SOURCE TO SEA
+   Homepage visual system
+   ========================================================= */
+
+
+/* ---------- Design tokens ---------- */
+
 :root {
-  --paper: #f3eee6;
-  --ink: #171717;
-  --river: #0f5f7a;
-  --rust: #a84f2a;
+  --paper: #f3eee5;
+  --paper-light: #f8f4ed;
+  --ink: #181715;
+  --blue: #075f7c;
+  --rust: #a94e27;
+  --line: rgba(24, 23, 21, 0.45);
+
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Arial, Helvetica, sans-serif;
 }
+
+
+/* ---------- Reset ---------- */
 
 * {
   box-sizing: border-box;
@@ -15,9 +31,21 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(255,255,255,.6),
+      transparent 35%
+    ),
+    var(--paper);
+
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 a {
@@ -25,211 +53,893 @@ a {
   text-decoration: none;
 }
 
-header {
-  position: relative;
-  z-index: 10;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 50;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 32px 40px;
+
+  padding: 38px 4vw;
 }
 
 .brand {
+  position: relative;
+
   display: flex;
   flex-direction: column;
+
   gap: 4px;
-  letter-spacing: 0.28em;
-  font-size: 20px;
+
+  font-family: var(--serif);
+  font-size: 17px;
+  letter-spacing: .32em;
+  line-height: 1.15;
 }
 
-nav {
+.brand-circle {
+  position: absolute;
+
+  width: 48px;
+  height: 48px;
+
+  left: 72px;
+  top: 17px;
+
+  border: 3px solid var(--rust);
+  border-right-color: transparent;
+
+  border-radius: 50%;
+
+  transform: rotate(14deg);
+}
+
+.brand-circle::after {
+  content: "";
+
+  position: absolute;
+
+  width: 13px;
+  height: 3px;
+
+  background: var(--rust);
+
+  bottom: -6px;
+  left: 22px;
+
+  transform: rotate(-8deg);
+}
+
+
+.main-nav {
   display: flex;
-  gap: 28px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  gap: 31px;
+
+  padding-top: 4px;
+
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .14em;
+}
+
+.main-nav a {
+  position: relative;
+}
+
+.booking-link::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: -9px;
+
+  height: 1px;
+
+  background: var(--rust);
+}
+
+
+/* =========================================================
+   HOMEPAGE
+   ========================================================= */
+
+.homepage {
+  overflow: hidden;
 }
 
 .hero {
   position: relative;
-  min-height: 1500px;
-  padding: 80px 5vw;
+
+  min-height: 2450px;
+
+  width: 100%;
+
+  padding-top: 170px;
+
   overflow: hidden;
 }
 
+
+/* ---------- Hero copy ---------- */
+
 .hero-copy {
-  position: relative;
-  z-index: 3;
-  max-width: 520px;
+  position: absolute;
+
+  z-index: 10;
+
+  top: 235px;
+  left: 4.5vw;
+
+  width: 31vw;
+  max-width: 500px;
 }
 
-.hero h1 {
+.hero-copy h1 {
   margin: 0;
-  font-size: clamp(58px, 6vw, 110px);
-  line-height: 0.98;
+
   font-weight: 400;
+
+  font-size: clamp(54px, 5vw, 86px);
+
+  line-height: 1.03;
+
+  letter-spacing: -.035em;
 }
 
-.hero-copy p {
-  margin-top: 42px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  line-height: 1.8;
-  letter-spacing: 0.14em;
+.small-caps {
+  margin-top: 30px;
+
+  font-family: var(--sans);
+
+  font-size: 10px;
+
+  line-height: 2;
+
+  letter-spacing: .20em;
+
+  text-transform: uppercase;
 }
 
-.river {
-  position: absolute;
-  top: -140px;
-  left: 31%;
-  width: 24vw;
-  min-width: 280px;
-  height: 1750px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(15,95,122,.95),
-      rgba(15,95,122,1) 45%,
-      rgba(15,95,122,.95)
-    );
-  clip-path: polygon(
-    48% 0%,
-    60% 7%,
-    44% 14%,
-    62% 22%,
-    37% 31%,
-    59% 39%,
-    35% 48%,
-    58% 57%,
-    31% 68%,
-    56% 77%,
-    26% 88%,
-    70% 100%,
-    0% 100%,
-    8% 86%,
-    2% 73%,
-    12% 59%,
-    5% 46%,
-    18% 33%,
-    10% 19%,
-    22% 8%
-  );
-  opacity: 0.98;
-  z-index: 1;
+.eyebrow {
+  margin: 0 0 14px;
+
+  font-family: var(--sans);
+
+  font-size: 10px;
+
+  letter-spacing: .20em;
 }
 
-.river::before,
-.river::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
+
+/* ---------- Rust marks ---------- */
+
+.rust-stroke {
+  display: block;
+
+  width: 55px;
+  height: 3px;
+
+  margin-top: 32px;
+
   background: var(--rust);
-  opacity: 0.95;
+
+  transform: rotate(-1deg);
 }
 
-.river::before {
-  width: 150px;
-  height: 150px;
-  left: -90px;
-  top: 620px;
+.rust-stroke.short {
+  width: 25px;
+  height: 2px;
+
+  margin-top: 0;
+  margin-bottom: 24px;
 }
 
-.river::after {
-  width: 210px;
-  height: 210px;
-  right: -130px;
-  top: 1080px;
-}
 
-.location {
+/* =========================================================
+   NILE
+   ========================================================= */
+
+.river-wrap {
   position: absolute;
-  z-index: 3;
+
+  top: -40px;
+  left: 24%;
+
+  z-index: 2;
+
+  width: 44vw;
+  min-width: 540px;
+
+  height: 2500px;
+
+  pointer-events: none;
+}
+
+.river-art {
+  width: 100%;
+  height: 100%;
+
+  object-fit: fill;
+
+  filter: saturate(.94) contrast(1.03);
+}
+
+
+/* ---------- Map points ---------- */
+
+.map-point {
+  position: absolute;
+
+  z-index: 8;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
   font-family: "Courier New", monospace;
-  font-size: 18px;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+
+  font-size: 17px;
+
+  letter-spacing: .03em;
+
   color: var(--ink);
 }
 
-.aswan {
-  top: 260px;
-  left: -80px;
+.map-point i {
+  display: block;
+
+  width: 11px;
+  height: 11px;
+
+  border-radius: 50%;
+
+  background: var(--rust);
 }
 
-.esna {
-  top: 890px;
-  right: -70px;
-}
+.map-point::after {
+  content: "";
 
-.luxor {
-  top: 1270px;
-  left: -85px;
-}
-
-.collection {
   position: absolute;
-  z-index: 4;
-  top: 300px;
-  right: 9vw;
-  width: 32vw;
-  max-width: 520px;
+
+  width: 52px;
+  height: 1px;
+
+  background: var(--rust);
 }
 
-.collection p {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+
+.map-aswan {
+  top: 210px;
+  left: -18px;
 }
 
-.collection h2 {
-  font-size: clamp(38px, 4vw, 70px);
-  font-weight: 400;
+.map-aswan::after {
+  left: 65px;
+  top: 21px;
+
+  transform: rotate(30deg);
 }
 
-section:not(.hero) {
+
+.map-esna {
+  top: 1390px;
+  right: -18px;
+}
+
+.map-esna::after {
+  right: 41px;
+  top: -7px;
+
+  transform: rotate(-35deg);
+}
+
+
+.map-luxor {
+  bottom: 150px;
+  right: 18px;
+}
+
+.map-luxor::after {
+  right: 48px;
+  top: -7px;
+
+  transform: rotate(-25deg);
+}
+
+
+/* =========================================================
+   COLLECTION
+   ========================================================= */
+
+.collection-block {
+  position: absolute;
+
+  z-index: 12;
+
+  top: 185px;
+  right: 5vw;
+
+  width: 41vw;
+
+  min-height: 560px;
+}
+
+.collection-number {
+  margin: 0 0 8px;
+
+  color: var(--rust);
+
+  font-size: 26px;
+
+  letter-spacing: .14em;
+}
+
+.collection-block h2 {
   position: relative;
-  padding: 120px 8vw;
-  min-height: 70vh;
+
+  z-index: 4;
+
+  margin: 0;
+
+  font-weight: 400;
+
+  font-size: 32px;
+
+  letter-spacing: .16em;
 }
 
-section:not(.hero) > p {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.16em;
+.collection-block .small-caps {
+  margin-top: 10px;
 }
 
-section:not(.hero) h2 {
-  max-width: 700px;
-  margin: 18px 0 0;
-  font-size: clamp(44px, 5vw, 78px);
-  line-height: 1.04;
+.rust-moon {
+  position: absolute;
+
+  z-index: 1;
+
+  border-radius: 50%;
+
+  background: var(--rust);
+
+  opacity: .88;
+}
+
+.moon-one {
+  width: 210px;
+  height: 210px;
+
+  left: 80px;
+  top: 155px;
+}
+
+.moon-two {
+  width: 250px;
+  height: 250px;
+
+  left: 90px;
+  top: 0;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(169,78,39,.9),
+      rgba(169,78,39,.55)
+    );
+}
+
+
+/* =========================================================
+   PLACEHOLDER ART LAYERS
+   These will become actual photographic/collage assets.
+   ========================================================= */
+
+.art-placeholder {
+  position: absolute;
+
+  z-index: 3;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px dashed rgba(24,23,21,.18);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.5),
+      rgba(220,210,194,.42)
+    );
+
+  color: rgba(24,23,21,.38);
+
+  font-family: var(--sans);
+
+  font-size: 9px;
+
+  letter-spacing: .18em;
+}
+
+.boat-placeholder {
+  width: 470px;
+  height: 330px;
+
+  top: 180px;
+  left: 25px;
+
+  transform: rotate(-1deg);
+}
+
+.journey-placeholder {
+  position: relative;
+
+  width: 420px;
+  height: 310px;
+
+  margin-top: 30px;
+
+  transform: rotate(.8deg);
+}
+
+.edition-placeholder {
+  width: 450px;
+  height: 330px;
+
+  left: 0;
+  top: 60px;
+
+  transform: rotate(-1.2deg);
+}
+
+
+/* ---------- Link treatment ---------- */
+
+.text-link {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  width: 180px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  font-family: var(--sans);
+
+  font-size: 9px;
+
+  letter-spacing: .16em;
+}
+
+
+/* =========================================================
+   JOURNAL NOTE
+   ========================================================= */
+
+.margin-note {
+  position: absolute;
+
+  z-index: 12;
+
+  top: 790px;
+  left: 4vw;
+
+  font-size: 18px;
+
+  line-height: 1.55;
+
+  font-style: italic;
+
+  transform: rotate(-2deg);
+}
+
+
+/* =========================================================
+   JOURNEY
+   ========================================================= */
+
+.journey-block {
+  position: absolute;
+
+  z-index: 14;
+
+  top: 900px;
+  right: 4vw;
+
+  width: 39vw;
+}
+
+.journey-block h2 {
+  margin: 0;
+
+  font-weight: 400;
+
+  font-size: clamp(32px, 3vw, 48px);
+
+  line-height: 1.15;
+}
+
+.journey-block .text-link {
+  position: relative;
+
+  margin-top: 24px;
+}
+
+
+/* =========================================================
+   TEMPLE / LUXOR PLACEHOLDER
+   ========================================================= */
+
+.temple-placeholder {
+  position: absolute;
+
+  z-index: 9;
+
+  top: 1480px;
+  left: 5vw;
+
+  width: 300px;
+  height: 300px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px dashed rgba(24,23,21,.2);
+
+  color: rgba(24,23,21,.35);
+
+  font-family: var(--sans);
+
+  font-size: 9px;
+
+  letter-spacing: .18em;
+
+  transform: rotate(-2deg);
+}
+
+
+/* =========================================================
+   EDITIONS
+   ========================================================= */
+
+.edition-block {
+  position: absolute;
+
+  z-index: 13;
+
+  top: 1640px;
+  right: 4vw;
+
+  width: 52vw;
+
+  height: 480px;
+}
+
+.edition-copy {
+  position: absolute;
+
+  right: 0;
+  top: 80px;
+
+  width: 270px;
+
+  z-index: 6;
+}
+
+.edition-copy h2 {
+  margin: 0;
+
+  font-weight: 400;
+
+  font-size: 27px;
+
+  line-height: 1.34;
+}
+
+.edition-copy .text-link {
+  position: relative;
+
+  margin-top: 24px;
+}
+
+
+/* =========================================================
+   CLOSING
+   ========================================================= */
+
+.source-note {
+  position: absolute;
+
+  z-index: 15;
+
+  left: 4vw;
+  bottom: 185px;
+
+  font-size: 27px;
+
+  line-height: 1.2;
+}
+
+.small-rust-circle {
+  display: inline-block;
+
+  width: 55px;
+  height: 55px;
+
+  margin-left: 26px;
+
+  border: 3px solid var(--rust);
+
+  border-right-color: transparent;
+
+  border-radius: 50%;
+
+  vertical-align: middle;
+}
+
+.closing-note {
+  position: absolute;
+
+  z-index: 15;
+
+  right: 5vw;
+  bottom: 125px;
+
+  font-size: 18px;
+
+  line-height: 1.55;
+
+  font-style: italic;
+
+  transform: rotate(-1.5deg);
+}
+
+
+/* =========================================================
+   BOOKING
+   ========================================================= */
+
+.booking {
+  position: relative;
+
+  z-index: 30;
+
+  min-height: 420px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 60px;
+
+  padding: 90px 8vw;
+
+  background: #171a18;
+
+  color: var(--paper-light);
+}
+
+.booking h2 {
+  margin: 12px 0 20px;
+
+  font-size: clamp(42px, 5vw, 74px);
+
   font-weight: 400;
 }
 
-@media (max-width: 900px) {
-  header {
-    padding: 24px;
+.booking p:not(.eyebrow) {
+  max-width: 520px;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.booking-button {
+  flex: none;
+
+  padding: 17px 24px;
+
+  border: 1px solid rgba(255,255,255,.45);
+
+  font-family: var(--sans);
+
+  font-size: 10px;
+
+  letter-spacing: .16em;
+}
+
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+.about {
+  min-height: 360px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 80px 8vw;
+}
+
+.about p {
+  max-width: 850px;
+
+  margin: 0;
+
+  font-size: clamp(32px, 4vw, 58px);
+
+  line-height: 1.2;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 28px 4vw;
+
+  border-top: 1px solid rgba(24,23,21,.2);
+
+  font-family: var(--sans);
+
+  font-size: 9px;
+
+  letter-spacing: .16em;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .site-header {
+    position: relative;
+
+    padding: 26px 22px;
   }
 
-  nav {
-    gap: 14px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+  .main-nav {
+    display: none;
   }
 
   .hero {
-    min-height: 1300px;
-    padding: 60px 24px;
+    min-height: 2900px;
+
+    padding-top: 0;
   }
 
-  .river {
-    left: 46%;
-    width: 42vw;
+  .hero-copy {
+    top: 90px;
+    left: 24px;
+
+    width: 80vw;
   }
 
-  .collection {
-    top: 520px;
-    right: 24px;
-    width: 48vw;
+  .hero-copy h1 {
+    font-size: 54px;
   }
+
+  .river-wrap {
+    top: 300px;
+    left: 22%;
+
+    width: 88vw;
+    min-width: 0;
+
+    height: 2450px;
+
+    opacity: .95;
+  }
+
+  .collection-block {
+    top: 620px;
+    right: 20px;
+
+    width: 65vw;
+  }
+
+  .boat-placeholder {
+    width: 100%;
+    height: 250px;
+
+    left: 0;
+  }
+
+  .margin-note {
+    top: 1120px;
+    left: 24px;
+  }
+
+  .journey-block {
+    top: 1350px;
+    right: 22px;
+
+    width: 68vw;
+  }
+
+  .journey-placeholder {
+    width: 100%;
+  }
+
+  .temple-placeholder {
+    top: 1860px;
+    left: 24px;
+
+    width: 220px;
+    height: 250px;
+  }
+
+  .edition-block {
+    top: 2150px;
+    right: 22px;
+
+    width: 78vw;
+  }
+
+  .edition-placeholder {
+    width: 100%;
+  }
+
+  .edition-copy {
+    top: 410px;
+    left: 0;
+
+    width: 100%;
+  }
+
+  .source-note {
+    bottom: 95px;
+    left: 24px;
+  }
+
+  .closing-note {
+    display: none;
+  }
+
+  .booking {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  footer {
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
 }
