@@ -1,0 +1,15 @@
+{
+  "name": "source-to-sea",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Source to Sea — Upper Nile Collection. Editorial site and travel-agent booking portal.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node server/dev-server.mjs",
+    "start": "node server/dev-server.mjs",
+    "assets": "python3 tools/build-assets.py"
+  }
+}
