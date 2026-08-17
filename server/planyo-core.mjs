@@ -75,6 +75,30 @@ async function buildUrl(method, params, config, md5) {
   return `${PLANYO_ENDPOINT}?${query}`;
 }
 
+/* This Planyo site accepts ISO dates (YYYY-MM-DD). The published
+   docs still show DD-MM-YYYY; sending that here returns
+   response_code 4, "Error listing reservations", because
+   01-09-2026 is not a valid ISO date. Convert either form. */
+export function toIsoDate(value) {
+  if (value === undefined || value === null || value === "") return value;
+  const text = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text;
+  const european = /^(\d{2})-(\d{2})-(\d{4})(.*)$/.exec(text);
+  if (european) return european[3] + "-" + european[2] + "-" + european[1] + european[4];
+  return text;
+}
+
+function isoDaysFromNow(offset) {
+  const date = new Date();
+  date.setDate(date.getDate() + offset);
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  return y + "-" + m + "-" + d;
+}
+
+const DATE_FIELDS = ["start_time", "end_time", "start_date", "end_date"];
+
 /**
  * Forwards one call to Planyo.
  * Returns { status, body } ready to be sent back as JSON.
@@ -101,14 +125,17 @@ export async function proxy({ method, params, config, md5, fetchImpl = fetch }) 
     };
   }
 
-    const merged = { ...(params || {}) };
+  const merged = { ...(params || {}) };
   if (config.siteId && !merged.site_id) merged.site_id = config.siteId;
   if (config.resourceId && !merged.resource_id) merged.resource_id = config.resourceId;
 
-  // Planyo requires dates for list_reservations
+  for (const field of DATE_FIELDS) {
+    if (merged[field]) merged[field] = toIsoDate(merged[field]);
+  }
+
   if (method === "list_reservations") {
-    if (!merged.start_time) merged.start_time = "2025-01-01";
-    if (!merged.end_time) merged.end_time = "2027-12-31";
+    if (!merged.start_time) merged.start_time = isoDaysFromNow(-30);
+    if (!merged.end_time) merged.end_time = isoDaysFromNow(400);
     if (!merged.detail_level) merged.detail_level = "3";
   }
 

@@ -539,7 +539,12 @@
 
     if (schedule.source === "planyo") {
       el.banner.className = "source-banner source-banner--live";
-      el.banner.innerHTML = "<b>Live</b> Availability is coming from Planyo.";
+      var count = (schedule.charters || []).length;
+      el.banner.innerHTML =
+        "<b>Live</b> Availability is coming from Planyo" +
+        (count
+          ? " &mdash; " + count + " charter" + (count === 1 ? "" : "s") + " in the current window."
+          : ". No charters are booked in the current window, so every future date is offered.");
       return;
     }
 

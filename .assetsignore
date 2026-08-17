@@ -1,0 +1,13 @@
+.git*
+node_modules
+.env
+.env.*
+!.env.example
+server
+functions
+tools
+worker.js
+wrangler.jsonc
+*.md
+*.png
+!assets/**

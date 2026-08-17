@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "node server/dev-server.mjs",
     "start": "node server/dev-server.mjs",
-    "assets": "python3 tools/build-assets.py"
+    "assets": "python3 tools/build-assets.py",
+    "preview": "npx wrangler dev"
   }
 }

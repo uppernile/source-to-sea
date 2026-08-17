@@ -50,12 +50,15 @@ the request format cannot drift apart between the two.
 
 To deploy:
 
-1. Cloudflare dashboard → Workers & Pages → Create → Pages → connect this repo.
-2. Build command: leave empty. Build output directory: `/`.
-3. Settings → Environment variables → add `PLANYO_API_KEY` (and
+1. Cloudflare dashboard → Workers & Pages → Create → Pages, **or** a Worker
+   with static assets. This repository now includes `wrangler.jsonc` and
+   `worker.js` so Workers Builds (`source-to-sea-v2`) can compile the site
+   and the Planyo proxy. Pages continues to use the `functions/` directory;
+   both import `server/planyo-core.mjs`.
+2. Settings → Environment variables → add `PLANYO_API_KEY` (and
    `PLANYO_RESOURCE_ID`, plus `PLANYO_SITE_ID` / `PLANYO_HASH_KEY` if they
    apply). Mark them **encrypted**. They are only ever read server-side.
-4. Deploy. Every push to `main` republishes.
+3. Deploy. Every push to `main` republishes.
 
 The free tier covers a trade portal comfortably and has no commercial-use
 restriction. Netlify works the same way if preferred — the function needs
@@ -241,6 +244,11 @@ To connect:
 4. Restart the server. The banner at the top of the portal reports whether it is
    running on live data or on `data/schedule.sample.json`.
 
+This site's Planyo API accepts **ISO dates** (`YYYY-MM-DD`). The published
+Planyo docs still show `DD-MM-YYYY`; sending that here returns
+`Error listing reservations`. The proxy converts either form, and the booking
+page sends ISO.
+
 To check the connection without loading the page:
 
 ```bash
@@ -248,9 +256,9 @@ To check the connection without loading the page:
 curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
   -d '{"method":"api_test"}'
 
-# the real thing
+# the real thing — ISO dates
 curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
-  -d '{"method":"list_reservations","params":{"start_time":"01-09-2026","end_time":"30-09-2026","detail_level":3}}'
+  -d '{"method":"list_reservations","params":{"start_time":"2026-09-01","end_time":"2026-09-30","detail_level":3}}'
 ```
 
 With no key configured everything still runs against the sample schedule, so the
