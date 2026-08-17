@@ -1,0 +1,320 @@
+/* =============================================================
+   SOURCE TO SEA — foundations
+   Tokens, reset and the chrome shared by every page.
+   The measured layout system itself lives in css/home.css.
+   ============================================================= */
+
+:root {
+  /* ---- paper & ink ---------------------------------------- */
+  --paper: #f4efe7;
+  --paper-2: #efe7da;
+  --paper-3: #e8dece;
+  --ink: #16130f;
+  --ink-70: rgba(22, 19, 15, 0.7);
+  --ink-50: rgba(22, 19, 15, 0.5);
+  --ink-30: rgba(22, 19, 15, 0.3);
+  --rule: rgba(22, 19, 15, 0.16);
+  --rust: #a8492a;
+  --rust-70: rgba(168, 73, 42, 0.7);
+  --rust-15: rgba(168, 73, 42, 0.15);
+  --river: #3d5f7a;
+  --river-15: rgba(61, 95, 122, 0.15);
+
+  /* ---- type ------------------------------------------------
+     Georgia is used deliberately: it is metrically identical on
+     every machine, which is what keeps the measured composition
+     measurable. Swap in the brand face here when it is licensed. */
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Desktop targets from the brief, expressed as a fluid scale
+     that lands inside the stated range at 1280–1512px wide. */
+  --fs-hero: clamp(44px, 4.2vw, 64px); /* 56–76 target band */
+  --fs-h2: clamp(30px, 2.9vw, 42px); /* 34–46 */
+  --fs-h3: clamp(24px, 2.1vw, 30px);
+  --fs-num: clamp(24px, 1.95vw, 30px); /* 26–30 */
+  --fs-body: clamp(16px, 1.15vw, 18px); /* 16–18 */
+  --fs-label: clamp(11px, 0.85vw, 13px); /* 11–13 */
+  --fs-nav: 12px; /* 11–12 */
+  --fs-meta: 10px; /* decorative metadata only */
+
+  --track-label: 0.18em;
+  --track-nav: 0.15em;
+
+  /* ---- chrome --------------------------------------------- */
+  --header-h: 104px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* several components lay their children out with flex or grid,
+   which would otherwise win against the hidden attribute */
+[hidden] {
+  display: none !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* =============================================================
+   TYPE HELPERS
+   ============================================================= */
+
+.label {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.label--rust {
+  color: var(--rust);
+}
+
+.meta {
+  font-family: var(--sans);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-50);
+}
+
+.rule {
+  display: block;
+  width: 56px;
+  height: 2px;
+  border: 0;
+  margin: 0;
+  background: var(--rust);
+}
+
+.rule--short {
+  width: 26px;
+  height: 1px;
+  background: var(--rust-70);
+}
+
+/* =============================================================
+   HEADER
+   Sits over a soft ivory veil so the collage can pass beneath it
+   without ever producing a visible band or divider.
+   ============================================================= */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 30px clamp(24px, 3vw, 48px) 0;
+  pointer-events: none;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -46px;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    var(--paper) 0%,
+    var(--paper) 52%,
+    rgba(244, 239, 231, 0) 100%
+  );
+}
+
+.site-header a,
+.site-header nav {
+  pointer-events: auto;
+}
+
+.brand {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.brand span {
+  display: block;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.2vw, 34px);
+  padding-top: 6px;
+  font-family: var(--sans);
+  font-size: var(--fs-nav);
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+}
+
+.main-nav a {
+  position: relative;
+  padding-bottom: 6px;
+  color: var(--ink-70);
+  transition: color 0.25s var(--ease);
+}
+
+.main-nav a:hover,
+.main-nav a[aria-current] {
+  color: var(--ink);
+}
+
+.main-nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--ink-30);
+}
+
+.main-nav .nav-booking {
+  color: var(--rust);
+  border-bottom: 1px solid var(--rust);
+}
+
+.main-nav .nav-booking:hover {
+  color: var(--rust);
+  background: var(--rust-15);
+}
+
+/* =============================================================
+   BUTTONS
+   ============================================================= */
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  padding: 12px 18px;
+  border: 1px solid var(--rust);
+  color: var(--rust);
+  background: rgba(244, 239, 231, 0.72);
+  font-family: var(--sans);
+  font-size: var(--fs-nav);
+  font-weight: 600;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  transition:
+    background 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+
+.cta:hover {
+  background: var(--rust);
+  color: var(--paper);
+}
+
+.cta--solid {
+  background: var(--rust);
+  color: var(--paper);
+}
+
+.cta--solid:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.cta[disabled],
+.cta[aria-disabled="true"] {
+  border-color: var(--ink-30);
+  color: var(--ink-30);
+  background: transparent;
+  pointer-events: none;
+}
+
+/* =============================================================
+   SITE FOOTER
+   ============================================================= */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 56px clamp(24px, 5vw, 80px);
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer .brand {
+  font-size: 15px;
+  letter-spacing: 0.26em;
+}
+
+@media (max-width: 900px) {
+  .main-nav {
+    gap: 16px;
+    font-size: 11px;
+  }
+
+  .main-nav a:not(.nav-booking) {
+    display: none;
+  }
+
+  .brand {
+    font-size: 18px;
+  }
+}
