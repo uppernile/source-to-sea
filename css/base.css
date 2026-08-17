@@ -187,6 +187,7 @@ button {
   font-weight: 600;
   line-height: 1.14;
   letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 .brand span {

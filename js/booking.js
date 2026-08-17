@@ -35,7 +35,6 @@
 
   var state = {
     schedule: null,
-    source: null,
     month: startOfMonth(new Date()),
     date: null,
     nights: config.nights.default,
@@ -203,12 +202,6 @@
     };
   }
 
-  /** The best outcome across both directions, for colouring a day. */
-  function evaluateDay(date, nights) {
-    var chosen = evaluate(date, nights, state.direction);
-    return chosen;
-  }
-
   function portName(id) {
     var port = config.ports[id];
     return port ? port.name : id || "port";
@@ -298,7 +291,7 @@
 
     for (var day = 1; day <= length; day++) {
       var date = new Date(month.getFullYear(), month.getMonth(), day);
-      var result = evaluateDay(date, state.nights);
+      var result = evaluate(date, state.nights, state.direction);
       var selected = state.date && daysBetween(state.date, date) === 0;
       var inRange =
         state.date &&
@@ -569,7 +562,6 @@
     .getSchedule(windowStart, windowEnd)
     .then(function (schedule) {
       state.schedule = schedule;
-      state.source = schedule.source;
       showSource(schedule);
 
       var saved = localStorage.getItem(STORAGE_KEY);
@@ -581,7 +573,11 @@
         var length = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
         var sellable = false;
         for (var day = 1; day <= length && !sellable; day++) {
-          var status = evaluateDay(new Date(cursor.getFullYear(), cursor.getMonth(), day), state.nights).status;
+          var status = evaluate(
+            new Date(cursor.getFullYear(), cursor.getMonth(), day),
+            state.nights,
+            state.direction
+          ).status;
           sellable = status === "available" || status === "reposition";
         }
         if (sellable) break;

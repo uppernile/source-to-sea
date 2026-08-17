@@ -186,7 +186,9 @@
     var params = {
       start_time: toPlanyoDate(from),
       end_time: toPlanyoDate(to),
-      detail_level: 1,
+      // 1 = reservation info, 2 = the reservation form items, which
+      // is where the charter's direction is recorded
+      detail_level: 3,
       resource_id: resourceId || undefined,
     };
 

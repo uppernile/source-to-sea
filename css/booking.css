@@ -296,8 +296,8 @@
 
 .day__tag {
   font-family: var(--sans);
-  font-size: 9px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-50);
 }
