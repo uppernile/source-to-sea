@@ -30,18 +30,40 @@ will not load.
 `http://192.168.1.24:4321`. Open that on a phone connected to the same Wi-Fi.
 Nothing to configure — the server already listens on every interface.
 
-### Published
+---
 
-The repository publishes to GitHub Pages from `main`:
+## Publishing
+
+The repository currently publishes to GitHub Pages from `main`:
 <https://uppernile.github.io/source-to-sea/>
 
 The whole site works there as static files, including the booking portal, which
-falls back to `data/schedule.sample.json`. **Pages cannot run the Planyo proxy**,
-because it only serves static files and the proxy is a Node process. Live Planyo
-availability needs a host that can run server code — a small Node host, or a
-serverless function on Netlify, Vercel or Cloudflare reusing the logic in
-`server/dev-server.mjs`. Until then the published site shows sample data and
-says so in a banner.
+falls back to `data/schedule.sample.json`. **GitHub Pages cannot run the Planyo
+proxy**, because it only serves files and the proxy needs a process. So the
+Pages build shows sample data and says so in a banner.
+
+### Moving to a host that can run the proxy
+
+`functions/` holds a Cloudflare Pages Function version of the proxy. It imports
+the same `server/planyo-core.mjs` as the local dev server, so the allow-list and
+the request format cannot drift apart between the two.
+
+To deploy:
+
+1. Cloudflare dashboard → Workers & Pages → Create → Pages → connect this repo.
+2. Build command: leave empty. Build output directory: `/`.
+3. Settings → Environment variables → add `PLANYO_API_KEY` (and
+   `PLANYO_RESOURCE_ID`, plus `PLANYO_SITE_ID` / `PLANYO_HASH_KEY` if they
+   apply). Mark them **encrypted**. They are only ever read server-side.
+4. Deploy. Every push to `main` republishes.
+
+The free tier covers a trade portal comfortably and has no commercial-use
+restriction. Netlify works the same way if preferred — the function needs
+renaming into `netlify/functions/` and a small handler wrapper, but
+`planyo-core.mjs` is unchanged.
+
+**Never put the API key in the repository.** It belongs in the host's
+environment variables, and in `.env` locally, which is git-ignored.
 
 ---
 
