@@ -104,7 +104,8 @@
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  /* the direction control carries four routes, so it gets the room */
+  grid-template-columns: minmax(190px, 0.85fr) minmax(220px, 1fr) minmax(300px, 1.5fr);
   gap: 1px;
   margin-bottom: 56px;
   border: 1px solid var(--rule);
@@ -113,12 +114,22 @@
 
 .control {
   display: grid;
+  align-content: start;
   gap: 12px;
   padding: 22px 26px 24px;
   background: var(--paper-2);
 }
 
 .control > .label {
+  color: var(--ink-50);
+}
+
+.control__note {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
   color: var(--ink-50);
 }
 
@@ -165,10 +176,26 @@
   color: var(--paper);
 }
 
+.segmented button:disabled {
+  border-style: dashed;
+  border-color: var(--rule);
+  color: var(--ink-30);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+/* the four routes, laid out two by two */
+.segmented--wide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
 .segmented--wide button {
-  flex: 1 1 auto;
+  padding: 10px 8px;
   font-size: 15px;
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 /* =============================================================
@@ -628,7 +655,8 @@
 @media (max-width: 980px) {
   .booking-hero,
   .availability,
-  .request__grid {
+  .request__grid,
+  .controls {
     grid-template-columns: minmax(0, 1fr);
   }
 

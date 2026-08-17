@@ -2,21 +2,18 @@
    AGENT BOOKING PORTAL
    -------------------------------------------------------------
    Three inputs — date, nights, direction — resolved against the
-   boat's actual movements.
+   charters already on the books.
 
-   The rule that makes this different from a normal availability
-   calendar is that a charter can only begin where the boat is.
-   The boat ends every trip at the far end of the run, so the
-   direction an agent can sell on a given date depends on the
-   charter before it. Where the ports do not match, the boat has
-   to sail empty to reach the start port: allowed if there is
-   enough clear water in the schedule, priced as a repositioning
-   charge, and refused outright when there is not.
+   Two operational rules shape what an agent may choose:
 
-   None of that is hard-coded into Planyo. The schedule comes
-   from Planyo (see js/planyo.js), the rules and money come from
-   js/config.js, and this file only decides what an agent may
-   choose.
+     1. Every route has a minimum length, because the sailing
+        takes that long. Aswan–Esna needs three nights,
+        Aswan–Luxor four.
+     2. Guests never disembark and embark on the same day, so
+        every booked charter blocks a day either side of itself.
+
+   Both live in js/config.js. The schedule comes from Planyo (see
+   js/planyo.js). This file only decides what can be sold.
    ============================================================= */
 
 (function () {
@@ -79,142 +76,116 @@
     maximumFractionDigits: 0,
   });
 
-  /* ---- where is the boat? -------------------------------------
-     The port the boat is sitting in on a given morning, plus how
-     long it has been there. `null` means we have no charter
-     history to go on, in which case any direction is offered and
-     the office confirms. */
+  /* ---- what is in the way? ------------------------------------
+     A charter blocks its own nights plus a turnaround day either
+     side, so nobody disembarks and embarks on the same day.
+     Returns a reason string, or null when the stay is clear. */
 
-  function boatAt(date) {
+  function blockedBy(start, nights) {
     var schedule = state.schedule;
-    if (!schedule) return { port: null, since: null, free: Infinity };
+    if (!schedule) return "No schedule loaded.";
 
-    var previous = null;
-    schedule.charters.forEach(function (charter) {
-      if (charter.end <= date && (!previous || charter.end > previous.end)) previous = charter;
-    });
-
-    /* Nothing in the schedule has moved the boat yet, so there is
-       no position to work around and the office places it as part
-       of the normal turnaround. */
-    if (!previous) return { port: null, since: null, free: Infinity };
-
-    return {
-      port: previous.to,
-      since: previous.end,
-      free: daysBetween(previous.end, date),
-    };
-  }
-
-  /* ---- can this departure be sold? ----------------------------
-     Returns one of:
-       available   — sail as asked
-       reposition  — sail as asked, boat moves empty first
-       restricted  — the boat cannot reach this start port in time
-       unavailable — the dates themselves are taken, closed or past */
-
-  function evaluate(date, nights, directionId) {
-    var schedule = state.schedule;
-    var direction = directionsById[directionId];
-    if (!schedule || !direction) return { status: "unavailable", reason: "No schedule loaded." };
-
-    var start = startOfDay(date);
     var end = addDays(start, nights);
-
-    if (start < startOfDay(new Date())) {
-      return { status: "unavailable", reason: "In the past." };
-    }
+    var turnaround = config.turnaroundDays;
 
     var clash = schedule.charters.filter(function (charter) {
-      return overlaps(start, end, charter.start, charter.end);
+      return overlaps(
+        start,
+        end,
+        addDays(charter.start, -turnaround),
+        addDays(charter.end, turnaround)
+      );
     })[0];
 
-    if (clash) {
-      return { status: "unavailable", reason: "Razis is already chartered on these dates." };
-    }
+    if (clash) return "Razis is already chartered around these dates.";
 
     var closure = (schedule.closures || []).filter(function (period) {
       return overlaps(start, end, period.start, addDays(period.end, 1));
     })[0];
 
-    if (closure) {
-      return { status: "unavailable", reason: closure.reason || "The boat is out of service." };
-    }
-
-    var position = boatAt(start);
-
-    if (!position.port || position.port === direction.from) {
-      return { status: "available", position: position };
-    }
-
-    /* The boat finished its last charter at the other end of the
-       run, so it has to sail empty to the requested start port. */
-    var clearDays = position.free;
-    var needed = config.repositioning.minDays;
-    var free = config.repositioning.freeAfterDays;
-
-    if (clearDays >= free) {
-      return { status: "available", position: position };
-    }
-
-    if (clearDays < needed) {
-      return {
-        status: "restricted",
-        position: position,
-        reason:
-          "Razis finishes in " +
-          portName(position.port) +
-          " " +
-          (clearDays === 0 ? "the same day" : clearDays + " day" + (clearDays === 1 ? "" : "s") + " before") +
-          ". Repositioning to " +
-          portName(direction.from) +
-          " needs " +
-          needed +
-          " days.",
-      };
-    }
-
-    /* Repositioning also has to fit between the previous charter
-       and this one without colliding with anything else. */
-    var moveStart = addDays(start, -needed);
-    var blocked = schedule.charters.some(function (charter) {
-      return overlaps(moveStart, start, charter.start, charter.end);
-    });
-
-    if (blocked) {
-      return {
-        status: "restricted",
-        position: position,
-        reason: "There is no clear water to reposition Razis before this departure.",
-      };
-    }
-
-    return {
-      status: "reposition",
-      position: position,
-      fee: config.repositioning.fee,
-      reason:
-        "Razis is left in " +
-        portName(position.port) +
-        " and sails empty to " +
-        portName(direction.from) +
-        " before you board.",
-    };
+    return closure ? closure.reason || "The boat is out of service." : null;
   }
 
-  function portName(id) {
-    var port = config.ports[id];
-    return port ? port.name : id || "port";
+  /** The longest stay that would fit from this date, 0 if none. */
+  function longestFrom(start) {
+    for (var nights = config.nights.max; nights >= config.nights.min; nights--) {
+      if (!blockedBy(start, nights)) return nights;
+    }
+    return 0;
+  }
+
+  var shortestRoute = Math.min.apply(
+    null,
+    directions.map(function (direction) {
+      return direction.minNights;
+    })
+  );
+
+  /* ---- can this departure be sold? ----------------------------
+     Returns one of:
+       available   — sail as asked
+       restricted  — the date is sellable, but not this route at
+                     this length
+       unavailable — nothing at all can start here */
+
+  function evaluate(date, nights, directionId) {
+    var direction = directionsById[directionId];
+    if (!state.schedule || !direction) {
+      return { status: "unavailable", reason: "No schedule loaded." };
+    }
+
+    var start = startOfDay(date);
+    if (start < startOfDay(new Date())) {
+      return { status: "unavailable", reason: "In the past." };
+    }
+
+    var longest = longestFrom(start);
+
+    if (longest < shortestRoute) {
+      return { status: "unavailable", reason: blockedBy(start, shortestRoute) };
+    }
+
+    if (longest < direction.minNights) {
+      return {
+        status: "restricted",
+        longest: longest,
+        reason:
+          "Only " +
+          longest +
+          " nights fit before the next charter, and " +
+          direction.label +
+          " needs at least " +
+          direction.minNights +
+          ".",
+      };
+    }
+
+    if (nights > longest) {
+      return {
+        status: "restricted",
+        longest: longest,
+        reason:
+          "Only " +
+          longest +
+          " nights fit before the next charter. Shorten the stay to depart on this date.",
+      };
+    }
+
+    if (nights < direction.minNights) {
+      return {
+        status: "restricted",
+        reason: direction.label + " needs at least " + direction.minNights + " nights.",
+      };
+    }
+
+    return { status: "available" };
   }
 
   /* ---- money --------------------------------------------------- */
 
-  function quote(evaluation) {
-    var nights = state.nights;
-    var perNight = state.rate.perNight;
-    var charter = perNight * nights;
-    var fee = evaluation && evaluation.status === "reposition" ? evaluation.fee : 0;
-    return { perNight: perNight, nights: nights, charter: charter, fee: fee, total: charter + fee };
+  function quote() {
+    var charter = state.rate.perNight * state.nights;
+    return { perNight: state.rate.perNight, nights: state.nights, total: charter };
   }
 
   /* ---- rendering ------------------------------------------------ */
@@ -224,6 +195,7 @@
     date: document.querySelector("[data-date]"),
     nights: document.querySelector("[data-nights]"),
     directions: document.querySelector("[data-directions]"),
+    nightsNote: document.querySelector("[data-nights-note]"),
     calendar: document.querySelector("[data-calendar]"),
     monthLabel: document.querySelector("[data-month-label]"),
     monthPrev: document.querySelector("[data-month-prev]"),
@@ -238,23 +210,33 @@
       nights: document.querySelector("[data-summary-nights]"),
       direction: document.querySelector("[data-summary-direction]"),
       rate: document.querySelector("[data-summary-rate]"),
-      repositionRow: document.querySelector("[data-summary-reposition-row]"),
-      reposition: document.querySelector("[data-summary-reposition]"),
       total: document.querySelector("[data-summary-total]"),
       flag: document.querySelector("[data-summary-flag]"),
       cta: document.querySelector("[data-summary-cta]"),
     },
   };
 
+  function minNights() {
+    var direction = directionsById[state.direction];
+    return direction ? direction.minNights : config.nights.min;
+  }
+
   function renderControls() {
+    var floor = minNights();
     var nights = "";
+
     for (var n = config.nights.min; n <= config.nights.max; n++) {
+      var tooShort = n < floor;
       nights +=
         '<button type="button" data-night="' +
         n +
         '" aria-pressed="' +
         (n === state.nights) +
-        '">' +
+        '"' +
+        (tooShort
+          ? ' disabled title="' + directionsById[state.direction].label + " needs " + floor + ' nights"'
+          : "") +
+        ">" +
         n +
         "</button>";
     }
@@ -273,6 +255,9 @@
         );
       })
       .join("");
+
+    el.nightsNote.textContent =
+      directionsById[state.direction].label + " sails in " + floor + " nights or more.";
   }
 
   function renderCalendar() {
@@ -306,10 +291,9 @@
         classes.push("day--unavailable");
       } else if (result.status === "restricted") {
         classes.push("day--restricted");
-        tag = "Restricted";
+        tag = result.longest ? "Max " + result.longest : "Restricted";
       } else {
         classes.push("day--available");
-        if (result.status === "reposition") tag = "Reposition";
       }
 
       if (selected) classes.push("day--selected");
@@ -344,14 +328,13 @@
       ["date", "nights", "direction", "rate", "total"].forEach(function (key) {
         summary[key].innerHTML = "&mdash;";
       });
-      summary.repositionRow.hidden = true;
       summary.flag.hidden = true;
       summary.cta.setAttribute("aria-disabled", "true");
       return;
     }
 
     var result = evaluate(state.date, state.nights, state.direction);
-    var money = quote(result);
+    var money = quote();
     var direction = directionsById[state.direction];
     var end = addDays(state.date, state.nights);
 
@@ -361,31 +344,22 @@
     summary.nights.textContent = state.nights + (state.nights === 1 ? " night" : " nights");
     summary.direction.textContent = direction.label;
     summary.rate.innerHTML =
-      MONEY.format(money.charter) +
+      MONEY.format(money.total) +
       "<small>" +
       MONEY.format(money.perNight) +
       " / night &middot; " +
       state.rate.tier +
       "</small>";
-
-    summary.repositionRow.hidden = !money.fee;
-    if (money.fee) summary.reposition.textContent = MONEY.format(money.fee);
-
     summary.total.textContent = MONEY.format(money.total);
 
-    if (result.status === "restricted" || result.status === "unavailable") {
+    if (result.status === "available") {
+      summary.flag.hidden = true;
+      summary.cta.removeAttribute("aria-disabled");
+    } else {
       summary.flag.hidden = false;
       summary.flag.className = "summary__flag";
       summary.flag.textContent = result.reason;
       summary.cta.setAttribute("aria-disabled", "true");
-    } else if (result.status === "reposition") {
-      summary.flag.hidden = false;
-      summary.flag.className = "summary__flag summary__flag--river";
-      summary.flag.textContent = result.reason + " " + config.repositioning.note;
-      summary.cta.removeAttribute("aria-disabled");
-    } else {
-      summary.flag.hidden = true;
-      summary.cta.removeAttribute("aria-disabled");
     }
   }
 
@@ -420,6 +394,8 @@
     var button = event.target.closest("[data-direction]");
     if (!button) return;
     state.direction = button.dataset.direction;
+    // a longer route cannot be sold at the shorter route's length
+    state.nights = Math.max(state.nights, minNights());
     renderControls();
     render();
   });
@@ -482,18 +458,41 @@
 
   /* ---- request ------------------------------------------------------ */
 
+  function refuse(title, detail) {
+    el.receipt.hidden = false;
+    el.receipt.innerHTML = "<h3>" + title + "</h3><p>" + detail + "</p>";
+    el.receipt.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
   el.requestForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
     if (!state.date) {
-      el.receipt.hidden = false;
-      el.receipt.innerHTML = "<h3>Choose a departure first</h3><p>Pick a date in the calendar above.</p>";
-      return;
+      return refuse("Choose a departure first", "Pick a date in the calendar above.");
+    }
+
+    /* The summary already disables its own call to action, but the
+       form has its own button and must not let an impossible
+       departure through. */
+    var check = evaluate(state.date, state.nights, state.direction);
+    if (check.status !== "available") {
+      return refuse("That departure cannot be booked", check.reason);
     }
 
     var data = Object.fromEntries(new FormData(el.requestForm));
-    var result = evaluate(state.date, state.nights, state.direction);
-    var money = quote(result);
+
+    var missing = ["agency", "consultant", "email"].filter(function (field) {
+      return !String(data[field] || "").trim();
+    });
+
+    if (missing.length) {
+      return refuse(
+        "A few details are missing",
+        "Please fill in " + missing.join(", ") + " so the office can reply."
+      );
+    }
+
+    var money = quote();
     var direction = directionsById[state.direction];
 
     var payload = {
@@ -502,7 +501,6 @@
       end_date: planyo.iso(addDays(state.date, state.nights)),
       nights: state.nights,
       direction: direction.id,
-      repositioning: money.fee ? { required: true, fee: money.fee } : { required: false },
       rate: { tier: state.rate.tier, per_night: money.perNight, currency: config.currency.code },
       total: money.total,
       agency: data.agency,
@@ -523,8 +521,7 @@
       state.nights +
       " nights, " +
       MONEY.format(money.total) +
-      (money.fee ? " including repositioning." : ".") +
-      "</p>" +
+      ".</p>" +
       "<p>This is the payload the portal will hand to Planyo once " +
       "<code>make_reservation</code> is enabled on the API key. Until then, send it to the office.</p>" +
       "<pre>" +
@@ -587,7 +584,7 @@
             state.nights,
             state.direction
           ).status;
-          sellable = status === "available" || status === "reposition";
+          sellable = status === "available";
         }
         if (sellable) break;
         cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);

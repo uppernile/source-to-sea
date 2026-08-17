@@ -40,8 +40,9 @@
           <p class="label label--rust">For travel partners</p>
           <h1>Find the right journey.</h1>
           <p>
-            Choose a date, a length of stay and a direction. Availability,
-            direction and trade rates for Razis, sailing between Aswan and Esna.
+            Choose a date, a length of stay and a direction. Availability and
+            trade rates for Razis, sailing the Nile between Aswan, Esna and
+            Luxor.
           </p>
         </div>
 
@@ -77,9 +78,10 @@
           <div class="control">
             <span class="label" id="nights-label">Nights</span>
             <div class="segmented" role="group" aria-labelledby="nights-label" data-nights></div>
+            <p class="control__note" data-nights-note></p>
           </div>
 
-          <div class="control">
+          <div class="control control--direction">
             <span class="label" id="direction-label">Direction</span>
             <div
               class="segmented segmented--wide"
@@ -114,7 +116,7 @@
 
           <p class="legend">
             <span><i class="is-available"></i> Available</span>
-            <span><i class="is-restricted"></i> Direction restricted</span>
+            <span><i class="is-restricted"></i> Restricted &mdash; shorter stay only</span>
             <span><i class="is-unavailable"></i> Unavailable</span>
           </p>
         </div>
@@ -139,10 +141,6 @@
             <div>
               <dt>Trade rate</dt>
               <dd data-summary-rate>&mdash;</dd>
-            </div>
-            <div data-summary-reposition-row hidden>
-              <dt>Repositioning</dt>
-              <dd data-summary-reposition>&mdash;</dd>
             </div>
             <div class="summary__total">
               <dt>Total</dt>
@@ -170,9 +168,8 @@
             <p class="label label--rust">Step two</p>
             <h2>Send the request.</h2>
             <p class="request__intro">
-              We hold the dates while the office confirms crew, direction and any
-              repositioning. You will have written confirmation within one working
-              day.
+              We hold the dates while the office confirms crew and direction. You
+              will have written confirmation within one working day.
             </p>
           </div>
 
@@ -216,7 +213,9 @@
         <span>To</span>
         <span>Sea</span>
       </a>
-      <p class="meta">Upper Nile Collection &middot; Trade enquiries &middot; Aswan &ndash; Esna</p>
+      <p class="meta">
+        Upper Nile Collection &middot; Trade enquiries &middot; Aswan &ndash; Esna &ndash; Luxor
+      </p>
       <p class="meta">&copy; 2026 Upper Nile Collection</p>
     </footer>
 
