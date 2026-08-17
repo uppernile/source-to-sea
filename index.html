@@ -6,7 +6,7 @@
     <title>Source to Sea — Upper Nile Collection</title>
     <meta
       name="description"
-      content="Source to Sea, part of the Upper Nile Collection. Private dahabiya charters on the Nile between Aswan and Esna."
+      content="The Upper Nile, sailed slowly. A collection of boats, journeys and encounters shaped by the river."
     />
     <link rel="preload" as="image" href="assets/nile-watercolor.webp" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -34,23 +34,28 @@
     </header>
 
     <div class="river-stage" id="top">
-      <!-- The Nile belongs to neither pane. It is laid over the seam,
-           overlapping both, and is built by js/river.js. -->
+      <!-- The Nile is fixed to the viewport. js/river.js tiles the
+           watercolour to the window height only — it does not scroll. -->
       <div class="river" data-river aria-hidden="true">
         <div class="river__flow" data-river-flow></div>
-        <img
-          class="river__boat"
-          data-river-boat
-          src="assets/dehabiya-sketch.webp"
-          alt=""
-          width="344"
-          height="560"
-        />
       </div>
 
       <main class="journey">
         <!-- ============ 01 / THE COLLECTION ============ -->
         <section class="scene scene--collection" id="collection">
+          <div class="scene__copy">
+            <div class="block">
+              <p class="label">Collection / 01</p>
+              <h2>Boats built<br />to linger.</h2>
+              <p class="block__lede">
+                Distinctive dahabiyas, each with a character of its own.
+              </p>
+              <a class="cta" href="#collection"
+                >Meet the boats <span aria-hidden="true">&rarr;</span></a
+              >
+            </div>
+          </div>
+
           <div class="scene__art">
             <img
               class="fig fig--collection-circle"
@@ -71,7 +76,7 @@
             <img
               class="fig fig--collection-boat"
               src="assets/dehabiya-main.webp"
-              alt="Razis, a traditional Egyptian dahabiya under sail"
+              alt="A traditional Egyptian dahabiya under sail"
               width="812"
               height="900"
             />
@@ -83,19 +88,6 @@
               height="560"
               aria-hidden="true"
             />
-          </div>
-
-          <div class="scene__copy">
-            <div class="block block--collection">
-              <p class="block__mark">
-                <b class="block__num">01</b>
-                <span class="label">The Collection</span>
-              </p>
-              <hr class="rule rule--short" />
-              <h2>Razis</h2>
-              <p class="block__meta">Built in Esna</p>
-              <a class="cta" href="#journeys">Explore boats <span aria-hidden="true">&rarr;</span></a>
-            </div>
           </div>
         </section>
 
@@ -136,18 +128,15 @@
           </div>
 
           <div class="scene__copy">
-            <div class="block block--journeys">
-              <p class="block__mark">
-                <b class="block__num">02</b>
-                <span class="label">Journeys</span>
-              </p>
-              <hr class="rule rule--short" />
-              <h2>The&nbsp;River.<br />The&nbsp;Journey.<br />The&nbsp;Connection.</h2>
+            <div class="block">
+              <p class="label">Journeys / 02</p>
+              <h2>Aswan to Esna,<br />set by the river's pace.</h2>
               <p class="block__lede">
-                Private sailings between Aswan and Esna, shaped by the river rather
-                than by a fixed itinerary.
+                Private journeys with room to stop, stay, and let the day take its own shape.
               </p>
-              <a class="cta" href="#editions">Explore journeys <span aria-hidden="true">&rarr;</span></a>
+              <a class="cta" href="#journeys"
+                >Explore journeys <span aria-hidden="true">&rarr;</span></a
+              >
             </div>
           </div>
         </section>
@@ -180,42 +169,36 @@
               aria-hidden="true"
             />
             <figure class="edition-card">
-              <span>Edition / 01</span>
-              <strong>Artists<br />on the Nile</strong>
+              <span>ED. 001</span>
+              <strong>Artists on the Nile</strong>
               <small>Winter 2027</small>
             </figure>
           </div>
 
           <div class="scene__copy">
-            <div class="block block--editions">
-              <p class="block__mark">
-                <b class="block__num">03</b>
-                <span class="label">Editions</span>
-              </p>
-              <hr class="rule rule--short" />
-              <h2>Seasonal editions.<br />Artists on the Nile.<br />New perspectives.</h2>
+            <div class="block">
+              <p class="label">Editions / 03</p>
+              <h2>Made and<br />displayed.</h2>
               <p class="block__lede">
-                Art, craft and changing collaborations that extend the collection
-                beyond the boats themselves.
+                Artists and makers come aboard.<br />
+                What takes shape begins with the river.
               </p>
-              <a class="cta" href="#about">Discover editions <span aria-hidden="true">&rarr;</span></a>
+              <a class="cta" href="#editions"
+                >Discover editions <span aria-hidden="true">&rarr;</span></a
+              >
             </div>
           </div>
         </section>
 
-        <!-- ============ THE RIVER RESOLVES ============ -->
+        <!-- ============ CLOSING ============ -->
         <section class="scene scene--close" aria-labelledby="close-title">
-          <div class="scene__art" aria-hidden="true"></div>
-
           <div class="scene__copy">
-            <div class="block block--close">
+            <div class="block">
               <h2 id="close-title">From source<br />to sea.</h2>
-            </div>
-
-            <div class="block block--closing-note">
-              <p>The Nile connects more than places.</p>
-              <p>It connects people, craft and stories.</p>
-              <hr class="rule" />
+              <p class="block__lede">
+                The river carries more than boats.<br />
+                People. Craft. Stories. Ideas.
+              </p>
             </div>
           </div>
         </section>
@@ -223,33 +206,13 @@
 
       <!-- ============ THE EDITORIAL ANCHOR ============ -->
       <aside class="pane" aria-label="Upper Nile Collection">
-        <div>
+        <div class="block block--pane">
           <p class="label label--rust pane__kicker">Upper Nile Collection</p>
-
-          <h1>A collection<br />shaped along<br />the river.</h1>
-
-          <hr class="rule" />
-
-          <p class="pane__manifesto">
-            Distinctive boats.<br />
-            Meaningful connections.<br />
-            Curated experiences.
+          <h1>The Upper Nile,<br />sailed slowly.</h1>
+          <p class="pane__lede">
+            A collection of boats, journeys and encounters shaped by the river.
           </p>
-        </div>
-
-        <div>
-          <nav class="chapters" data-chapters aria-label="Chapters">
-            <a href="#collection" data-chapter="collection"
-              ><b>01</b><span>Collection</span></a
-            >
-            <a href="#journeys" data-chapter="journeys"><b>02</b><span>Journeys</span></a>
-            <a href="#editions" data-chapter="editions"><b>03</b><span>Editions</span></a>
-          </nav>
-
-          <p class="pane__note">
-            Sailing between Aswan and Esna,<br />
-            where time follows the river.
-          </p>
+          <p class="label pane__rule">Private journeys between Aswan and Esna</p>
         </div>
       </aside>
     </div>
