@@ -6,9 +6,8 @@
    the two things the agent portal actually needs to know:
 
      1. which nights the boat is already committed or closed
-     2. which port the boat is left in after each charter,
-        because that decides whether a requested direction is
-        possible without repositioning
+     2. which route each existing charter sailed, which is kept
+        as a custom reservation form item in Planyo
 
    Every call goes through the server proxy at /api/planyo, which
    holds the API key. Planyo's documentation is explicit that the
@@ -155,7 +154,6 @@
 
         return {
           source: "sample",
-          homePort: data.homePort,
           charters: data.charters
             .map(function (charter) {
               var direction = directions[charter.direction];
@@ -237,7 +235,7 @@
         });
       }
 
-      return { source: "planyo", charters: charters, closures: closures, homePort: null };
+      return { source: "planyo", charters: charters, closures: closures };
     });
   }
 

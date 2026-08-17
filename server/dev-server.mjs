@@ -28,25 +28,11 @@ import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = resolve(fileURLToPath(new URL("../", import.meta.url)));
-const PLANYO_ENDPOINT = "https://www.planyo.com/rest/";
+import { proxy, readConfig, statusPayload } from "./planyo-core.mjs";
 
-/* Only these methods may be reached from the browser. Anything
-   that writes, or that could leak the customer database, stays
-   off the list until it is needed and reviewed. */
-const ALLOWED_METHODS = new Set([
-  "api_test",
-  "get_site_info",
-  "list_resources",
-  "get_resource_info",
-  "get_resource_usage",
-  "get_resource_usage_for_month",
-  "is_resource_available",
-  "can_make_reservation",
-  "list_reservations",
-  "get_reservation_price",
-  "get_simplified_daily_pricing",
-]);
+const ROOT = resolve(fileURLToPath(new URL("../", import.meta.url)));
+
+const md5 = async (text) => createHash("md5").update(text).digest("hex");
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -78,12 +64,7 @@ async function loadEnvFile() {
   }
 }
 
-const planyo = () => ({
-  apiKey: process.env.PLANYO_API_KEY || "",
-  hashKey: process.env.PLANYO_HASH_KEY || "",
-  siteId: process.env.PLANYO_SITE_ID || "",
-  resourceId: process.env.PLANYO_RESOURCE_ID || "",
-});
+const planyo = () => readConfig(process.env);
 
 /* ---- responses --------------------------------------------- */
 
@@ -110,83 +91,26 @@ async function readBody(req) {
 
 /* ---- Planyo ------------------------------------------------- */
 
-async function callPlanyo(method, params) {
-  const config = planyo();
-  const query = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(params || {})) {
-    if (value === undefined || value === null || value === "") continue;
-    query.set(key, String(value));
-  }
-
-  query.set("method", method);
-  query.set("api_key", config.apiKey);
-
-  if (config.hashKey) {
-    // md5(hashKey + timestamp + method), per Planyo's request format
-    const timestamp = Math.floor(Date.now() / 1000);
-    query.set("hash_timestamp", String(timestamp));
-    query.set(
-      "hash_key",
-      createHash("md5").update(config.hashKey + timestamp + method).digest("hex")
-    );
-  }
-
-  const response = await fetch(`${PLANYO_ENDPOINT}?${query}`, {
-    headers: { accept: "application/json" },
-  });
-  const text = await response.text();
-
-  try {
-    return { ok: response.ok, body: JSON.parse(text) };
-  } catch {
-    return { ok: false, body: { response_code: -1, response_message: text.slice(0, 400) } };
-  }
-}
-
 async function handleApi(req, res, url) {
   const config = planyo();
 
   if (url.pathname === "/api/planyo/status") {
-    return sendJson(res, 200, {
-      configured: Boolean(config.apiKey),
-      siteId: config.siteId || null,
-      resourceId: config.resourceId || null,
-      methods: [...ALLOWED_METHODS],
-    });
+    return sendJson(res, 200, statusPayload(config));
   }
 
   if (url.pathname !== "/api/planyo") {
     return sendJson(res, 404, { error: "unknown endpoint" });
   }
 
-  if (!config.apiKey) {
-    return sendJson(res, 503, {
-      error: "planyo_not_configured",
-      message:
-        "Set PLANYO_API_KEY (see .env.example) to connect the booking portal to live availability.",
-    });
-  }
-
   const payload = req.method === "POST" ? await readBody(req) : Object.fromEntries(url.searchParams);
-  const method = payload.method;
+  const result = await proxy({
+    method: payload.method,
+    params: payload.params,
+    config,
+    md5,
+  });
 
-  if (!ALLOWED_METHODS.has(method)) {
-    return sendJson(res, 400, {
-      error: "method_not_allowed",
-      message: `"${method}" is not in the proxy allow-list.`,
-    });
-  }
-
-  try {
-    const params = { ...(payload.params || {}) };
-    if (config.siteId && !params.site_id) params.site_id = config.siteId;
-
-    const result = await callPlanyo(method, params);
-    return sendJson(res, result.ok ? 200 : 502, result.body);
-  } catch (error) {
-    return sendJson(res, 502, { error: "planyo_unreachable", message: String(error) });
-  }
+  return sendJson(res, result.status, result.body);
 }
 
 /* ---- static ------------------------------------------------- */

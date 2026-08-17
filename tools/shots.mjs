@@ -46,19 +46,46 @@ const FRAMES = [
     `,
   },
   {
-    name: "17-booking-restricted",
+    name: "17-booking-luxor-min-nights",
     path: "/booking.html",
     w: 1440,
     h: 900,
-    y: 560,
+    y: 300,
     act: `
-      document.querySelectorAll('[data-direction]')[1].click();
+      document.querySelector('[data-direction="aswan-luxor"]').click();
+      document.querySelector('[data-month-next]').click();
+    `,
+  },
+  {
+    name: "19-booking-restricted",
+    path: "/booking.html",
+    w: 1440,
+    h: 900,
+    y: 620,
+    act: `
+      document.querySelector('[data-direction="aswan-luxor"]').click();
+      document.querySelector('[data-night="7"]').click();
       document.querySelector('[data-month-next]').click();
       document.querySelector('[data-day="2026-09-17"]').click();
     `,
   },
   {
     name: "18-booking-request",
+    path: "/booking.html",
+    w: 1440,
+    h: 1200,
+    y: 1400,
+    act: `
+      document.querySelector('[data-month-next]').click();
+      document.querySelector('[data-day="2026-09-17"]').click();
+      document.querySelector('#agency').value = 'Wayfarer Travel';
+      document.querySelector('#consultant').value = 'A. Fahmy';
+      document.querySelector('#email').value = 'trade@wayfarer.example';
+      document.querySelector('[data-request-form] button[type=submit]').click();
+    `,
+  },
+  {
+    name: "20-booking-refused",
     path: "/booking.html",
     w: 1440,
     h: 1200,

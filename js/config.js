@@ -22,42 +22,31 @@ window.STS_CONFIG = {
     endPortProperty: "end_port",
   },
 
-  /* ---- the river --------------------------------------------- */
+  /* ---- the river ---------------------------------------------
+     Aswan is the southern end of the run, Luxor the northern,
+     with Esna between them. Each route has a minimum length,
+     because the sailing itself takes that long. */
   ports: {
     aswan: { id: "aswan", name: "Aswan" },
     esna: { id: "esna", name: "Esna" },
+    luxor: { id: "luxor", name: "Luxor" },
   },
 
   directions: [
-    { id: "aswan-esna", from: "aswan", to: "esna", label: "Aswan \u2192 Esna" },
-    { id: "esna-aswan", from: "esna", to: "aswan", label: "Esna \u2192 Aswan" },
+    { id: "aswan-esna", from: "aswan", to: "esna", label: "Aswan \u2192 Esna", minNights: 3 },
+    { id: "esna-aswan", from: "esna", to: "aswan", label: "Esna \u2192 Aswan", minNights: 3 },
+    { id: "aswan-luxor", from: "aswan", to: "luxor", label: "Aswan \u2192 Luxor", minNights: 4 },
+    { id: "luxor-aswan", from: "luxor", to: "aswan", label: "Luxor \u2192 Aswan", minNights: 4 },
   ],
 
   nights: { min: 3, max: 7, default: 4 },
 
-  /* ---- repositioning -----------------------------------------
-     A charter can only begin where the boat actually is. If the
-     previous charter finished at the other end of the run, the
-     boat has to be repositioned first.
-
-     `minDays` is the sailing time needed to move the boat
-     between Aswan and Esna without guests aboard. With less
-     clear water than that the departure is impossible and the
-     calendar marks the date as direction-restricted.
-
-     `freeAfterDays` is the gap beyond which the move absorbs
-     into normal operations and costs the agent nothing. Between
-     the two, the departure is offered with the fee shown as its
-     own line in the summary.
-
-     These are placeholders until the operational rules and the
-     Planyo pricing rules are confirmed. */
-  repositioning: {
-    minDays: 2,
-    freeAfterDays: 7,
-    fee: 950,
-    note: "Charged when the boat must sail without guests to reach your start port.",
-  },
+  /* ---- turnaround ---------------------------------------------
+     Guests never disembark and embark on the same day. A charter
+     ending on the 12th leaves the 13th as the earliest possible
+     departure, so every booked charter is treated as blocking a
+     day either side of itself. */
+  turnaroundDays: 1,
 
   /* ---- trade rates -------------------------------------------
      Per-night nett rates by partner tier. Live pricing will come
