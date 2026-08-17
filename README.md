@@ -55,10 +55,10 @@ To deploy:
    `worker.js` so Workers Builds (`source-to-sea-v2`) can compile the site
    and the Planyo proxy. Pages continues to use the `functions/` directory;
    both import `server/planyo-core.mjs`.
-3. Settings → Environment variables → add `PLANYO_API_KEY` (and
+2. Settings → Environment variables → add `PLANYO_API_KEY` (and
    `PLANYO_RESOURCE_ID`, plus `PLANYO_SITE_ID` / `PLANYO_HASH_KEY` if they
    apply). Mark them **encrypted**. They are only ever read server-side.
-4. Deploy. Every push to `main` republishes.
+3. Deploy. Every push to `main` republishes.
 
 The free tier covers a trade portal comfortably and has no commercial-use
 restriction. Netlify works the same way if preferred — the function needs
