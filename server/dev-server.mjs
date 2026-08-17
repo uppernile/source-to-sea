@@ -23,6 +23,7 @@
 
 import { createServer } from "node:http";
 import { createHash } from "node:crypto";
+import { networkInterfaces } from "node:os";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -223,14 +224,27 @@ await loadEnvFile();
 
 const port = Number(process.env.PORT || 4321);
 
+/** The address a phone on the same Wi-Fi can reach this machine on. */
+function lanAddress() {
+  for (const addresses of Object.values(networkInterfaces())) {
+    for (const address of addresses || []) {
+      if (address.family === "IPv4" && !address.internal) return address.address;
+    }
+  }
+  return null;
+}
+
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
   if (url.pathname.startsWith("/api/")) return handleApi(req, res, url);
   return serveStatic(req, res, url);
 }).listen(port, () => {
   const config = planyo();
+  const lan = lanAddress();
+
   console.log(`\n  Source to Sea  →  http://localhost:${port}`);
   console.log(`  booking portal →  http://localhost:${port}/booking.html`);
+  if (lan) console.log(`  on your phone  →  http://${lan}:${port}   (same Wi-Fi)`);
   console.log(
     `  planyo         →  ${
       config.apiKey ? "connected via /api/planyo" : "not configured, using data/schedule.sample.json"

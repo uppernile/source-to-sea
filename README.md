@@ -21,8 +21,27 @@ The server is a single dependency-free Node file (`server/dev-server.mjs`) that
 serves the site and proxies Planyo. Node 18 or later.
 
 You can also open `index.html` straight off disk, but the booking portal needs
-the server: browsers block `fetch` from `file://`, so the calendar will not
-load.
+a server of some kind: browsers block `fetch` from `file://`, so the calendar
+will not load.
+
+### On a phone
+
+`npm run dev` prints a second address on start, something like
+`http://192.168.1.24:4321`. Open that on a phone connected to the same Wi-Fi.
+Nothing to configure — the server already listens on every interface.
+
+### Published
+
+The repository publishes to GitHub Pages from `main`:
+<https://uppernile.github.io/source-to-sea/>
+
+The whole site works there as static files, including the booking portal, which
+falls back to `data/schedule.sample.json`. **Pages cannot run the Planyo proxy**,
+because it only serves static files and the proxy is a Node process. Live Planyo
+availability needs a host that can run server code — a small Node host, or a
+serverless function on Netlify, Vercel or Cloudflare reusing the logic in
+`server/dev-server.mjs`. Until then the published site shows sample data and
+says so in a banner.
 
 ---
 
