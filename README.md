@@ -188,8 +188,22 @@ To connect:
 4. Restart the server. The banner at the top of the portal reports whether it is
    running on live data or on `data/schedule.sample.json`.
 
+To check the connection without loading the page:
+
+```bash
+# reaches Planyo and needs no key — proves the proxy round trip works
+curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
+  -d '{"method":"api_test"}'
+
+# the real thing
+curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
+  -d '{"method":"list_reservations","params":{"start_time":"01-09-2026","end_time":"30-09-2026","detail_level":3}}'
+```
+
 With no key configured everything still runs against the sample schedule, so the
-portal can be reviewed and demonstrated before credentials exist.
+portal can be reviewed and demonstrated before credentials exist. If a key *is*
+configured but the call fails, the portal falls back to the sample schedule and
+prints Planyo's own error message in the banner.
 
 Submitting a request currently prepares and displays the payload rather than
 writing to Planyo. Turning that into a real reservation means enabling

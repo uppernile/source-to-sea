@@ -547,10 +547,19 @@
     }
 
     el.banner.className = "source-banner";
+
+    if (schedule.source === "fallback") {
+      el.banner.innerHTML =
+        "<b>Planyo unreachable</b> The calendar has fallen back to " +
+        "<code>data/schedule.sample.json</code>. Planyo said: " +
+        (schedule.error || "no reason given") +
+        ".";
+      return;
+    }
+
     el.banner.innerHTML =
       "<b>Sample data</b> Planyo is not connected in this environment, so the calendar is running on " +
-      "<code>data/schedule.sample.json</code>. Set <code>PLANYO_API_KEY</code> to switch to live availability." +
-      (schedule.error ? " (" + schedule.error + ")" : "");
+      "<code>data/schedule.sample.json</code>. Set <code>PLANYO_API_KEY</code> to switch to live availability.";
   }
 
   renderControls();
