@@ -101,8 +101,16 @@ export async function proxy({ method, params, config, md5, fetchImpl = fetch }) 
     };
   }
 
-  const merged = { ...(params || {}) };
+    const merged = { ...(params || {}) };
   if (config.siteId && !merged.site_id) merged.site_id = config.siteId;
+  if (config.resourceId && !merged.resource_id) merged.resource_id = config.resourceId;
+
+  // Planyo requires dates for list_reservations
+  if (method === "list_reservations") {
+    if (!merged.start_time) merged.start_time = "2025-01-01";
+    if (!merged.end_time) merged.end_time = "2027-12-31";
+    if (!merged.detail_level) merged.detail_level = "3";
+  }
 
   try {
     const response = await fetchImpl(await buildUrl(method, merged, config, md5), {
