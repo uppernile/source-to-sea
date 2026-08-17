@@ -1,6 +1,8 @@
 /* =============================================================
    HOMEPAGE BEHAVIOUR
-     1. the chapter index in the right pane tracks the scroll
+     1. when About reaches the viewport, the fixed pane and the
+        river step aside so they do not overlay the full-width
+        page
      2. a measurement overlay for art-directing the collages
         (press "g", or load the page with ?grid)
    ============================================================= */
@@ -8,33 +10,22 @@
 (function () {
   "use strict";
 
-  /* ---- chapter index ---------------------------------------- */
+  /* ---- off-river -------------------------------------------- */
 
-  var links = Array.prototype.slice.call(
-    document.querySelectorAll("[data-chapters] a")
-  );
+  var about = document.getElementById("about");
 
-  if (links.length && "IntersectionObserver" in window) {
-    var byId = {};
-    links.forEach(function (link) {
-      var section = document.getElementById(link.dataset.chapter);
-      if (section) byId[link.dataset.chapter] = { link: link, section: section };
-    });
-
-    var observer = new IntersectionObserver(
+  if (about && "IntersectionObserver" in window) {
+    var offRiver = new IntersectionObserver(
       function (entries) {
-        entries.forEach(function (entry) {
-          var record = byId[entry.target.id];
-          if (!record) return;
-          record.link.classList.toggle("is-current", entry.isIntersecting);
-        });
+        var entry = entries[0];
+        document.body.classList.toggle(
+          "is-off-river",
+          entry.isIntersecting && entry.intersectionRatio > 0.04
+        );
       },
-      { rootMargin: "-45% 0px -45% 0px" }
+      { threshold: [0, 0.04, 0.12, 0.28, 0.5] }
     );
-
-    Object.keys(byId).forEach(function (id) {
-      observer.observe(byId[id].section);
-    });
+    offRiver.observe(about);
   }
 
   /* ---- measurement overlay -----------------------------------
