@@ -241,6 +241,11 @@ To connect:
 4. Restart the server. The banner at the top of the portal reports whether it is
    running on live data or on `data/schedule.sample.json`.
 
+This site's Planyo API accepts **ISO dates** (`YYYY-MM-DD`). The published
+Planyo docs still show `DD-MM-YYYY`; sending that here returns
+`Error listing reservations`. The proxy converts either form, and the booking
+page sends ISO.
+
 To check the connection without loading the page:
 
 ```bash
@@ -248,9 +253,9 @@ To check the connection without loading the page:
 curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
   -d '{"method":"api_test"}'
 
-# the real thing
+# the real thing — ISO dates
 curl -X POST localhost:4321/api/planyo -H 'content-type: application/json' \
-  -d '{"method":"list_reservations","params":{"start_time":"01-09-2026","end_time":"30-09-2026","detail_level":3}}'
+  -d '{"method":"list_reservations","params":{"start_time":"2026-09-01","end_time":"2026-09-30","detail_level":3}}'
 ```
 
 With no key configured everything still runs against the sample schedule, so the

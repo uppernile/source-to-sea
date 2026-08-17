@@ -39,22 +39,75 @@
     return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
   }
 
-  /* Planyo takes and returns dates as "DD-MM-YYYY HH:MM". */
+  /* This site's Planyo API accepts ISO dates. The published docs
+     still show DD-MM-YYYY, which this endpoint rejects. */
   function toPlanyoDate(date) {
-    return (
-      String(date.getDate()).padStart(2, "0") +
-      "-" +
-      String(date.getMonth() + 1).padStart(2, "0") +
-      "-" +
-      date.getFullYear()
-    );
+    return iso(date);
   }
 
   function fromPlanyoDate(text) {
-    var match = /^(\d{2})-(\d{2})-(\d{4})/.exec(String(text));
-    if (match) return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
-    var parsed = new Date(text);
+    if (text === undefined || text === null || text === "") return null;
+    if (typeof text === "number") return new Date(text * (text < 1e12 ? 1000 : 1));
+
+    var raw = String(text);
+    var isoMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+    if (isoMatch) {
+      return new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+    }
+
+    var european = /^(\d{2})-(\d{2})-(\d{4})/.exec(raw);
+    if (european) {
+      return new Date(Number(european[3]), Number(european[2]) - 1, Number(european[1]));
+    }
+
+    var parsed = new Date(raw);
     return isNaN(parsed) ? null : parsed;
+  }
+
+  /* list_reservations returns {results: null} when the window is
+     empty, an array when it is not, and sometimes a keyed object.
+     Treating any of those as Object.values() used to crash on null
+     and fall back to sample data even after a successful call. */
+  function asReservationList(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.results)) return data.results;
+    if (Array.isArray(data.reservations)) return data.reservations;
+    if ("results" in data) return data.results ? asReservationList(data.results) : [];
+
+    var values = Object.values(data);
+    if (
+      values.length &&
+      values.every(function (item) {
+        return item && typeof item === "object" && (item.start_time || item.reservation_id || item.start);
+      })
+    ) {
+      return values;
+    }
+    return [];
+  }
+
+  function asUsagePeriods(data) {
+    if (!data) return [];
+    var usage = data.usage || data;
+    var periods = [];
+
+    function walk(node) {
+      if (!node) return;
+      if (Array.isArray(node)) {
+        node.forEach(function (item) {
+          if (item && (item.from || item.to || item.q)) periods.push(item);
+        });
+        return;
+      }
+      if (typeof node !== "object") return;
+      Object.keys(node).forEach(function (key) {
+        walk(node[key]);
+      });
+    }
+
+    walk(usage);
+    return periods;
   }
 
   var status = null;
@@ -202,10 +255,10 @@
         return null;
       }),
     ]).then(function (results) {
-      var reservations = results[0] || [];
-      var usage = results[1];
+      var reservations = asReservationList(results[0]);
+      var usagePeriods = asUsagePeriods(results[1]);
 
-      var charters = (Array.isArray(reservations) ? reservations : Object.values(reservations))
+      var charters = reservations
         .map(normalise)
         .filter(Boolean)
         .filter(function (charter) {
@@ -219,21 +272,16 @@
          vacations or blocked time in Planyo — treat them as
          closures so the calendar greys them out. */
       var closures = [];
-      if (usage) {
-        Object.keys(usage).forEach(function (key) {
-          var periods = usage[key];
-          if (!Array.isArray(periods)) return;
-          periods.forEach(function (period) {
-            if (!period.q) return;
-            var start = fromPlanyoDate(period.from) || new Date(period.from * 1000);
-            var end = fromPlanyoDate(period.to) || new Date(period.to * 1000);
-            var covered = charters.some(function (charter) {
-              return charter.start <= start && charter.end >= end;
-            });
-            if (!covered) closures.push({ start: start, end: end, reason: "Unavailable" });
-          });
+      usagePeriods.forEach(function (period) {
+        if (!period.q) return;
+        var start = fromPlanyoDate(period.from) || new Date(period.from * 1000);
+        var end = fromPlanyoDate(period.to) || new Date(period.to * 1000);
+        if (!start || !end || isNaN(start) || isNaN(end)) return;
+        var covered = charters.some(function (charter) {
+          return charter.start <= start && charter.end >= end;
         });
-      }
+        if (!covered) closures.push({ start: start, end: end, reason: "Unavailable" });
+      });
 
       return { source: "planyo", charters: charters, closures: closures };
     });
