@@ -80,9 +80,9 @@ css/grid-overlay.css  development only, see "Art-directing" below
 
 js/river.js           lays out the continuous Nile
 js/home.js            chapter index + the measurement overlay
-js/config.js          rates, ports, nights, repositioning rules
+js/config.js          rates, ports, routes and their minimum lengths
 js/planyo.js          Planyo adapter with a sample-data fallback
-js/booking.js         availability, repositioning and pricing logic
+js/booking.js         availability, route rules and pricing
 
 assets/               web-ready artwork, generated (see below)
 data/                 sample charter schedule
@@ -180,24 +180,36 @@ About.
 
 Three inputs: **date → nights → direction**. No predefined itineraries.
 
-### Repositioning
+### The rules
 
-A charter can only begin where the boat actually is, and every trip ends at the
-far end of the run. So the direction that can be sold on a date depends on the
-charter before it. `js/booking.js` reads the schedule, works out which port the
-boat is left in, and resolves a requested departure to one of four states:
+Aswan is the southern end of the run, Luxor the northern, Esna between them.
+Four routes are sold, and each has a minimum length because the sailing takes
+that long:
 
-| State                | When                                                        |
-| -------------------- | ----------------------------------------------------------- |
-| Available            | the boat is already at the start port, or there is enough slack for the move to absorb into normal operations |
-| Available + fee      | the boat must sail empty to reach the start port, and there is time to do it |
-| Direction restricted | the boat cannot reach the start port in time                 |
-| Unavailable          | the dates are chartered, closed, or in the past              |
+| Route          | Minimum |
+| -------------- | ------- |
+| Aswan ↔ Esna   | 3 nights |
+| Aswan ↔ Luxor  | 4 nights |
 
-The thresholds and the fee are placeholders in `js/config.js`
-(`repositioning.minDays`, `freeAfterDays`, `fee`) pending confirmation of the
-operational rules and how they are best expressed in Planyo. Nothing about the
-rule is hard-coded into the interface.
+Guests never disembark and embark on the same day, so every booked charter
+blocks a day either side of itself. A charter ending on the 12th leaves the
+13th as the earliest possible departure.
+
+Both rules live in `js/config.js` — `directions[].minNights` and
+`turnaroundDays`. `js/booking.js` applies them and resolves a departure to one
+of three states:
+
+| State       | When                                                          |
+| ----------- | ------------------------------------------------------------- |
+| Available   | the selected route fits at the selected length                 |
+| Restricted  | the date is sellable, but not this route at this length — the calendar shows the longest stay that does fit |
+| Unavailable | nothing can start here: chartered, closed, or in the past      |
+
+The nights control disables lengths below the selected route's minimum, so the
+shorter stay is prevented rather than reported.
+
+There is no repositioning charge. Where the boat has to move between the end of
+one charter and the start of the next, the office absorbs it.
 
 ### Rates
 
@@ -256,9 +268,11 @@ writes.
 
 ## Known next steps
 
-- Confirm how repositioning should be modelled in Planyo (a resource-level rule,
-  a pricing-manager rule, or a separate resource) before the placeholder
-  thresholds are treated as real.
+- Decide whether the homepage should still read "sailing between Aswan and
+  Esna" now that Aswan–Luxor charters are sold. The phrase appears in the right
+  pane, the Journeys chapter and the About facts.
+- Confirm whether Esna–Luxor is ever sold as its own route. Adding it is one
+  entry in `directions` in `js/config.js`.
 - Map agent identity to Planyo so trade rates come from the pricing manager
   rather than `js/config.js`.
 - Enable `make_reservation` so a request becomes a provisional booking.
