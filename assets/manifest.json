@@ -1,0 +1,56 @@
+{
+  "blue-paper-circle.webp": {
+    "source": "blue-paper-circle.png",
+    "width": 620,
+    "height": 620,
+    "aspect": 1.0
+  },
+  "date-palms-sketch.webp": {
+    "source": "date-palms-sketch.png",
+    "width": 353,
+    "height": 700,
+    "aspect": 0.5043
+  },
+  "dehabiya-main.webp": {
+    "source": "dehabiya-main.png",
+    "width": 812,
+    "height": 900,
+    "aspect": 0.9022
+  },
+  "dehabiya-sketch.webp": {
+    "source": "dehabiya-sketch.png",
+    "width": 344,
+    "height": 560,
+    "aspect": 0.6143
+  },
+  "dehabiya-water.webp": {
+    "source": "dehabiya-water.png",
+    "width": 1100,
+    "height": 393,
+    "aspect": 2.799
+  },
+  "nile-bird.webp": {
+    "source": "nile-bird.png",
+    "width": 567,
+    "height": 640,
+    "aspect": 0.8859
+  },
+  "nile-watercolor.webp": {
+    "source": "nile-watercolor.png",
+    "width": 456,
+    "height": 900,
+    "aspect": 0.5067
+  },
+  "temple-ruins.webp": {
+    "source": "temple-ruins.png",
+    "width": 495,
+    "height": 760,
+    "aspect": 0.6513
+  },
+  "terracotta-circle.webp": {
+    "source": "terracotta-circle.png",
+    "width": 620,
+    "height": 620,
+    "aspect": 1.0
+  }
+}
