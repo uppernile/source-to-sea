@@ -1,731 +1,226 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Source to Sea | Upper Nile Collection</title>
-
-<style>
-:root{
-  --paper:#f4efe7;
-  --paper-warm:#eee5d8;
-  --ink:#171512;
-  --rust:#a64a28;
-  --left:58vw;
-  --right:42vw;
-  --serif:Georgia,"Times New Roman",serif;
-  --sans:Arial,Helvetica,sans-serif;
-}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:var(--serif);
-  overflow-x:hidden;
-}
-img{display:block}
-a{color:inherit;text-decoration:none}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-.site-header{
-  position:fixed;
-  top:0; left:0;
-  width:100%;
-  z-index:120;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  padding:26px 3vw 0;
-  pointer-events:none;
-}
-.site-header a,
-.site-header nav{pointer-events:auto}
-
-.brand{
-  font:600 15px/1.12 var(--sans);
-  letter-spacing:.26em;
-}
-.brand span{display:block}
-
-.main-nav{
-  display:flex;
-  gap:25px;
-  font:11px var(--sans);
-  letter-spacing:.14em;
-}
-.main-nav a:last-child{
-  color:var(--rust);
-  border-bottom:1px solid var(--rust);
-  padding-bottom:7px;
-}
-
-/* =========================================================
-   PAGE STRUCTURE
-   ========================================================= */
-.story-wrap{
-  position:relative;
-  min-height:100vh;
-  background:var(--paper);
-}
-
-/* RIGHT SIDE: fixed, but visually part of same page */
-.fixed-panel{
-  position:fixed;
-  top:0; right:0;
-  width:var(--right);
-  height:100vh;
-  z-index:35;
-  padding:118px 5vw 60px;
-  background:var(--paper);
-  /* deliberately NO border */
-}
-
-.panel-kicker,
-.panel-index,
-.eyebrow,
-.section-label,
-.cta{
-  font-family:var(--sans);
-  letter-spacing:.16em;
-}
-
-.panel-kicker{
-  margin:0 0 34px;
-  color:var(--rust);
-  font-size:13px;
-}
-
-.fixed-panel h1{
-  margin:0;
-  max-width:520px;
-  font-size:clamp(54px,5vw,78px);
-  line-height:.98;
-  font-weight:400;
-  letter-spacing:-.035em;
-}
-
-.rust-line{
-  display:block;
-  width:55px;
-  height:2px;
-  margin:28px 0;
-  background:var(--rust);
-}
-
-.manifesto{
-  margin:0;
-  font:12px/2 var(--sans);
-  letter-spacing:.15em;
-}
-
-.panel-index{
-  position:absolute;
-  left:5vw;
-  bottom:14vh;
-  display:grid;
-  gap:13px;
-  font-size:12px;
-}
-.panel-index span{
-  display:inline-block;
-  width:36px;
-  color:var(--rust);
-}
-
-.panel-note{
-  position:absolute;
-  left:5vw;
-  bottom:5.5vh;
-  margin:0;
-  font-size:16px;
-  line-height:1.45;
-  font-style:italic;
-}
-
-/* LEFT SIDE: scrolling collage */
-.story{
-  position:relative;
-  width:var(--left);
-  background:var(--paper);
-  padding-top:150px; /* breathing room below SOURCE TO SEA */
-}
-
-.scene{
-  position:relative;
-  min-height:640px;
-  padding:0 42px;
-  overflow:visible;
-}
-
-.scene + .scene{
-  margin-top:70px; /* clearer separation 01 / 02 / 03 */
-}
-
-.section-label{
-  position:relative;
-  z-index:20;
-  display:flex;
-  align-items:baseline;
-  gap:13px;
-  margin-bottom:30px;
-  font-size:11px;
-}
-.section-label b{
-  color:var(--rust);
-  font:400 28px var(--serif);
-  letter-spacing:.04em;
-}
-
-.asset{
-  position:absolute;
-  height:auto!important;
-  object-fit:contain;
-}
-
-.paper-circle{
-  aspect-ratio:1/1;
-  object-fit:cover;
-  border-radius:50%;
-}
-
-.copy{
-  position:absolute;
-  z-index:24;
-}
-
-.eyebrow{
-  margin:0;
-  font-size:11px;
-  color:var(--rust);
-}
-
-.small-line{
-  display:block;
-  width:24px;
-  height:1px;
-  margin:12px 0 15px;
-  background:var(--rust);
-}
-
-.copy h2{
-  margin:0;
-  font-weight:400;
-  line-height:1.06;
-  letter-spacing:-.015em;
-}
-
-.copy p:not(.eyebrow):not(.micro){
-  margin:14px 0 0;
-  font-size:15px;
-  line-height:1.5;
-  max-width:260px;
-}
-
-.micro{
-  margin:8px 0 0;
-  font:10px var(--sans)!important;
-  letter-spacing:.17em;
-}
-
-.cta{
-  display:inline-flex;
-  gap:26px;
-  align-items:center;
-  margin-top:19px;
-  padding:10px 14px;
-  color:var(--rust);
-  border:1px solid var(--rust);
-  font-size:11px;
-  font-weight:700;
-  background:rgba(244,239,231,.76);
-}
-
-/* =========================================================
-   THE NILE
-   One fixed, continuous watercolor crossing the pane seam.
-   No repeat. No visible divider.
-   ========================================================= */
-.nile-divider{
-  position:fixed;
-  z-index:70;
-  top:76px;
-  left:58vw;
-  width:220px;
-  height:calc(100vh - 76px);
-  transform:translateX(-50%);
-  pointer-events:none;
-}
-
-.nile-divider img{
-  width:100%;
-  height:100%;
-  object-fit:fill;
-  object-position:center top;
-}
-
-/* =========================================================
-   01 COLLECTION
-   ========================================================= */
-.collection{
-  min-height:650px;
-}
-
-.collection-circle{
-  z-index:3;
-  width:155px;
-  left:238px;
-  top:110px;
-}
-
-.collection-sketch{
-  z-index:6;
-  width:115px;
-  left:385px;
-  top:125px;
-  opacity:.65;
-}
-
-.collection-water{
-  z-index:7;
-  width:360px;
-  left:90px;
-  top:340px;
-  opacity:.8;
-}
-
-.collection-boat{
-  z-index:10;
-  width:390px;
-  left:80px;
-  top:205px;
-}
-
-.collection-copy{
-  left:42px;
-  top:90px;
-  width:170px;
-}
-
-.collection-copy h2{
-  font-size:39px;
-  letter-spacing:.06em;
-}
-
-/* =========================================================
-   02 JOURNEYS
-   ========================================================= */
-.journeys{
-  min-height:640px;
-}
-
-.journey-circle{
-  z-index:3;
-  width:130px;
-  left:80px;
-  top:165px;
-}
-
-.journey-palms{
-  z-index:7;
-  width:150px;
-  left:45px;
-  top:110px;
-  opacity:.88;
-}
-
-.journey-temple{
-  z-index:8;
-  width:185px;
-  left:45px;
-  top:330px;
-}
-
-.journey-bird{
-  z-index:11;
-  width:105px;
-  left:250px;
-  top:120px;
-}
-
-.journey-copy{
-  left:255px;
-  top:210px;
-  width:250px;
-}
-
-.journey-copy h2{
-  font-size:34px;
-}
-
-/* =========================================================
-   03 EDITIONS
-   ========================================================= */
-.editions{
-  min-height:690px;
-}
-
-.editions-blue{
-  z-index:3;
-  width:170px;
-  left:45px;
-  top:130px;
-}
-
-.editions-rust{
-  z-index:4;
-  width:95px;
-  left:180px;
-  top:360px;
-}
-
-.edition-card{
-  position:absolute;
-  z-index:10;
-  width:110px;
-  height:158px;
-  left:165px;
-  top:340px;
-  padding:15px 10px;
-  text-align:center;
-  background:#d7bd96;
-  transform:rotate(1.5deg);
-}
-
-.edition-card span,
-.edition-card small{
-  display:block;
-  font:8px var(--sans);
-  letter-spacing:.13em;
-}
-
-.edition-card strong{
-  display:block;
-  margin:22px 0 18px;
-  font-size:13px;
-  line-height:1.25;
-  font-weight:400;
-  letter-spacing:.07em;
-}
-
-.editions-bird{
-  z-index:7;
-  width:95px;
-  left:80px;
-  top:500px;
-  transform:scaleX(-1);
-  opacity:.8;
-}
-
-.editions-copy{
-  left:300px;
-  top:135px;
-  width:250px;
-  background:rgba(244,239,231,.88);
-  padding:10px 10px 12px;
-}
-
-.editions-copy h2{
-  font-size:31px;
-}
-
-/* =========================================================
-   CLOSING
-   ========================================================= */
-.close{
-  min-height:420px;
-  margin-top:10px!important;
-}
-
-.from-source{
-  position:absolute;
-  left:45px;
-  bottom:65px;
-  font-size:30px;
-  line-height:1.05;
-}
-
-.closing-copy{
-  position:absolute;
-  left:285px;
-  bottom:62px;
-  width:250px;
-  font-size:19px;
-  line-height:1.38;
-}
-.closing-copy p{margin:0 0 5px}
-
-/* =========================================================
-   OFF-RIVER CONTENT
-   ========================================================= */
-.after{
-  width:var(--left);
-  position:relative;
-  z-index:80;
-}
-
-.about{
-  padding:80px 7vw 90px;
-  background:var(--paper-warm);
-}
-
-.about h2,
-.booking h2{
-  margin:14px 0 22px;
-  font-size:52px;
-  line-height:1;
-  font-weight:400;
-}
-
-.about>p:last-child{
-  max-width:560px;
-  font-size:17px;
-  line-height:1.6;
-}
-
-.booking{
-  min-height:310px;
-  padding:70px 7vw;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:50px;
-  background:#181a18;
-  color:var(--paper);
-}
-
-.booking p:not(.eyebrow){
-  font-size:17px;
-}
-
-.booking-button{
-  flex:none;
-  padding:15px 22px;
-  border:1px solid var(--rust);
-  color:#d87847;
-  font:700 11px var(--sans);
-  letter-spacing:.15em;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-@media(max-width:900px){
-  :root{--left:100vw;--right:100vw}
-
-  .main-nav{display:none}
-
-  .fixed-panel{
-    position:relative;
-    width:100%;
-    height:auto;
-    min-height:720px;
-    padding:115px 8vw 60px;
-  }
-
-  .panel-index,
-  .panel-note{left:8vw}
-
-  .story,
-  .after{width:100%}
-
-  .nile-divider{
-    left:auto;
-    right:-55px;
-    transform:none;
-    width:165px;
-  }
-}
-
-@media(max-width:620px){
-  .story{padding-top:120px}
-  .scene{padding:0 22px}
-  .scene + .scene{margin-top:45px}
-  .fixed-panel h1{font-size:49px}
-  .collection-boat{width:340px;left:20px}
-  .collection-water{width:315px;left:30px}
-  .journey-copy,
-  .editions-copy{left:auto;right:18px;width:44%}
-}
-</style>
-</head>
-
-<body>
-
-<header class="site-header">
-  <a class="brand" href="#top">
-    <span>SOURCE</span>
-    <span>TO</span>
-    <span>SEA</span>
-  </a>
-
-  <nav class="main-nav">
-    <a href="#collection">BOATS</a>
-    <a href="#journeys">JOURNEYS</a>
-    <a href="#editions">EDITIONS</a>
-    <a href="#about">ABOUT</a>
-    <a href="#booking">AGENT BOOKING →</a>
-  </nav>
-</header>
-
-<div class="nile-divider" aria-hidden="true">
-  <img src="nile-watercolor.png" alt="">
-</div>
-
-<aside class="fixed-panel" id="top">
-  <p class="panel-kicker">UPPER NILE COLLECTION</p>
-
-  <h1>
-    A collection<br>
-    shaped along<br>
-    the river.
-  </h1>
-
-  <span class="rust-line"></span>
-
-  <p class="manifesto">
-    DISTINCTIVE BOATS.<br>
-    MEANINGFUL CONNECTIONS.<br>
-    CURATED EXPERIENCES.
-  </p>
-
-  <div class="panel-index">
-    <a href="#collection"><span>01</span> COLLECTION</a>
-    <a href="#journeys"><span>02</span> JOURNEYS</a>
-    <a href="#editions"><span>03</span> EDITIONS</a>
-  </div>
-
-  <p class="panel-note">
-    Sailing between Aswan and Esna.<br>
-    Where time follows the river.
-  </p>
-</aside>
-
-<main class="story">
-
-  <section class="scene collection" id="collection">
-    <div class="section-label"><b>01 /</b> THE COLLECTION</div>
-
-    <img class="asset paper-circle collection-circle"
-         src="terracotta-circle.png" alt="">
-
-    <img class="asset collection-sketch"
-         src="dehabiya-sketch.png" alt="">
-
-    <img class="asset collection-water"
-         src="dehabiya-water.png" alt="">
-
-    <img class="asset collection-boat"
-         src="dehabiya-main.png" alt="Traditional Egyptian dahabiya">
-
-    <div class="copy collection-copy">
-      <p class="eyebrow">THE COLLECTION</p>
-      <span class="small-line"></span>
-      <h2>RAZIS</h2>
-      <p class="micro">BUILT IN ESNA</p>
-      <a class="cta" href="#journeys">EXPLORE BOATS <span>→</span></a>
-    </div>
-  </section>
-
-  <section class="scene journeys" id="journeys">
-    <div class="section-label"><b>02 /</b> JOURNEYS</div>
-
-    <img class="asset paper-circle journey-circle"
-         src="terracotta-circle.png" alt="">
-
-    <img class="asset journey-palms"
-         src="date-palms-sketch.png" alt="">
-
-    <img class="asset journey-temple"
-         src="temple-ruins.png" alt="Ancient Egyptian temple ruins">
-
-    <img class="asset journey-bird"
-         src="nile-bird.png" alt="">
-
-    <div class="copy journey-copy">
-      <p class="eyebrow">JOURNEYS</p>
-      <span class="small-line"></span>
-      <h2>The River.<br>The Journey.<br>The Connection.</h2>
-      <p>
-        Private journeys between Aswan and Esna,
-        shaped by the river rather than a rigid itinerary.
-      </p>
-      <a class="cta" href="#editions">EXPLORE JOURNEYS <span>→</span></a>
-    </div>
-  </section>
-
-  <section class="scene editions" id="editions">
-    <div class="section-label"><b>03 /</b> EDITIONS</div>
-
-    <img class="asset paper-circle editions-blue"
-         src="blue-paper-circle.png" alt="">
-
-    <img class="asset paper-circle editions-rust"
-         src="terracotta-circle.png" alt="">
-
-    <div class="edition-card">
-      <span>EDITION / 01</span>
-      <strong>ARTISTS<br>ON THE NILE</strong>
-      <small>WINTER 2027</small>
-    </div>
-
-    <img class="asset editions-bird"
-         src="nile-bird.png" alt="">
-
-    <div class="copy editions-copy">
-      <p class="eyebrow">EDITIONS</p>
-      <span class="small-line"></span>
-      <h2>
-        Seasonal editions.<br>
-        Artists on the Nile.<br>
-        New perspectives.
-      </h2>
-      <p>
-        Art, craft and changing collaborations
-        that expand the collection beyond the boats themselves.
-      </p>
-      <a class="cta" href="#close">DISCOVER EDITIONS <span>→</span></a>
-    </div>
-  </section>
-
-  <section class="scene close" id="close">
-    <div class="from-source">From source<br>to sea.</div>
-
-    <div class="closing-copy">
-      <p>The Nile connects more than places.</p>
-      <p>It connects people, craft and stories.</p>
-      <span class="rust-line"></span>
-    </div>
-  </section>
-
-</main>
-
-<div class="after">
-
-  <section class="about" id="about">
-    <p class="eyebrow">ABOUT</p>
-    <h2>Upper Nile Collection</h2>
-    <p>
-      The collection story, philosophy and people behind the journeys
-      live here, after the visual river experience rather than interrupting it.
-    </p>
-  </section>
-
-  <section class="booking" id="booking">
-    <div>
-      <p class="eyebrow">FOR TRAVEL PARTNERS</p>
-      <h2>Plan a journey.</h2>
-      <p>View availability, direction and trade access.</p>
-    </div>
-
-    <a class="booking-button" href="#">AGENT ACCESS →</a>
-  </section>
-
-</div>
-
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Agent Booking — Source to Sea | Upper Nile Collection</title>
+    <meta
+      name="description"
+      content="Availability, trip length, direction and trade rates for travel partners of the Upper Nile Collection."
+    />
+    <meta name="robots" content="noindex" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/booking.css" />
+  </head>
+
+  <body class="booking-page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Source to Sea, home">
+        <span>Source</span>
+        <span>To</span>
+        <span>Sea</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <a href="index.html#collection">Boats</a>
+        <a href="index.html#journeys">Journeys</a>
+        <a href="index.html#editions">Editions</a>
+        <a href="index.html#about">About</a>
+        <a class="nav-booking" href="booking.html" aria-current="page"
+          >Agent booking&nbsp;&rarr;</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <!-- ============ HERO ============ -->
+      <section class="booking-hero wrap">
+        <div>
+          <p class="label label--rust">For travel partners</p>
+          <h1>Find the right journey.</h1>
+          <p>
+            Choose a date, a length of stay and a direction. Availability,
+            direction and trade rates for Razis, sailing between Aswan and Esna.
+          </p>
+        </div>
+
+        <div class="partner-box">
+          <p class="label">Partner access</p>
+          <form data-partner-form>
+            <label class="visually-hidden" for="partner-code">Partner code</label>
+            <input
+              id="partner-code"
+              name="code"
+              placeholder="Partner code"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button type="submit">Apply</button>
+          </form>
+          <p class="partner-box__state" data-partner-state>
+            Showing published rates. Enter your partner code to see your trade rate.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============ CONTROLS ============ -->
+      <section class="wrap" aria-label="Availability filters">
+        <p class="source-banner" data-source-banner hidden></p>
+
+        <div class="controls">
+          <div class="control">
+            <label class="label" for="start-date">Date</label>
+            <input id="start-date" type="date" data-date />
+          </div>
+
+          <div class="control">
+            <span class="label" id="nights-label">Nights</span>
+            <div class="segmented" role="group" aria-labelledby="nights-label" data-nights></div>
+          </div>
+
+          <div class="control">
+            <span class="label" id="direction-label">Direction</span>
+            <div
+              class="segmented segmented--wide"
+              role="group"
+              aria-labelledby="direction-label"
+              data-directions
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CALENDAR + SUMMARY ============ -->
+      <section class="availability wrap">
+        <div>
+          <div class="section-head">
+            <h2>Journey Calendar</h2>
+
+            <div class="month-nav">
+              <button type="button" data-month-prev aria-label="Previous month">&larr;</button>
+              <strong data-month-label>&nbsp;</strong>
+              <button type="button" data-month-next aria-label="Next month">&rarr;</button>
+            </div>
+          </div>
+
+          <div class="calendar">
+            <div class="calendar__weekdays" aria-hidden="true">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span>
+              <span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+            <div class="calendar__days" data-calendar role="grid" aria-label="Departure dates"></div>
+          </div>
+
+          <p class="legend">
+            <span><i class="is-available"></i> Available</span>
+            <span><i class="is-restricted"></i> Direction restricted</span>
+            <span><i class="is-unavailable"></i> Unavailable</span>
+          </p>
+        </div>
+
+        <aside class="summary" aria-label="Booking summary">
+          <p class="label label--rust">Your selection</p>
+          <h2 data-summary-title>Choose a departure</h2>
+
+          <dl>
+            <div>
+              <dt>Date</dt>
+              <dd data-summary-date>&mdash;</dd>
+            </div>
+            <div>
+              <dt>Nights</dt>
+              <dd data-summary-nights>&mdash;</dd>
+            </div>
+            <div>
+              <dt>Direction</dt>
+              <dd data-summary-direction>&mdash;</dd>
+            </div>
+            <div>
+              <dt>Trade rate</dt>
+              <dd data-summary-rate>&mdash;</dd>
+            </div>
+            <div data-summary-reposition-row hidden>
+              <dt>Repositioning</dt>
+              <dd data-summary-reposition>&mdash;</dd>
+            </div>
+            <div class="summary__total">
+              <dt>Total</dt>
+              <dd data-summary-total>&mdash;</dd>
+            </div>
+          </dl>
+
+          <p class="summary__flag" data-summary-flag hidden></p>
+
+          <a class="cta cta--solid" href="#request" data-summary-cta aria-disabled="true">
+            Continue to request <span aria-hidden="true">&rarr;</span>
+          </a>
+
+          <p class="summary__note">
+            Nett trade rates, excluding flights, visas and gratuities. Provisional
+            until confirmed by the Upper Nile Collection office.
+          </p>
+        </aside>
+      </section>
+
+      <!-- ============ REQUEST ============ -->
+      <section class="request" id="request">
+        <div class="wrap request__grid">
+          <div>
+            <p class="label label--rust">Step two</p>
+            <h2>Send the request.</h2>
+            <p class="request__intro">
+              We hold the dates while the office confirms crew, direction and any
+              repositioning. You will have written confirmation within one working
+              day.
+            </p>
+          </div>
+
+          <form data-request-form novalidate>
+            <div class="field-grid">
+              <div class="field">
+                <label class="label" for="agency">Agency</label>
+                <input id="agency" name="agency" autocomplete="organization" required />
+              </div>
+              <div class="field">
+                <label class="label" for="consultant">Consultant</label>
+                <input id="consultant" name="consultant" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div class="field">
+                <label class="label" for="guests">Guests</label>
+                <input id="guests" name="guests" type="number" min="1" max="12" value="6" />
+              </div>
+              <div class="field field--full">
+                <label class="label" for="notes">Notes</label>
+                <textarea id="notes" name="notes" placeholder="Client preferences, flexibility on dates or direction, special requests."></textarea>
+              </div>
+            </div>
+
+            <button class="cta cta--solid" type="submit">
+              Continue to request <span aria-hidden="true">&rarr;</span>
+            </button>
+
+            <div class="request__receipt" data-request-receipt hidden></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="index.html">
+        <span>Source</span>
+        <span>To</span>
+        <span>Sea</span>
+      </a>
+      <p class="meta">Upper Nile Collection &middot; Trade enquiries &middot; Aswan &ndash; Esna</p>
+      <p class="meta">&copy; 2026 Upper Nile Collection</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/planyo.js"></script>
+    <script src="js/booking.js" defer></script>
+  </body>
 </html>

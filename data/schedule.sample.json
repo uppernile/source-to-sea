@@ -1,0 +1,26 @@
+{
+  "note": "Placeholder charter schedule. Used only while the Planyo API key is unset, so the booking portal can be reviewed before credentials are wired up. Replace nothing here by hand once Planyo is connected — the proxy takes over.",
+  "boat": "Razis",
+  "homePort": "esna",
+  "charters": [
+    { "start": "2026-09-04", "end": "2026-09-08", "direction": "esna-aswan", "status": "confirmed" },
+    { "start": "2026-09-11", "end": "2026-09-16", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2026-09-22", "end": "2026-09-26", "direction": "esna-aswan", "status": "confirmed" },
+    { "start": "2026-10-02", "end": "2026-10-06", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2026-10-09", "end": "2026-10-16", "direction": "esna-aswan", "status": "confirmed" },
+    { "start": "2026-10-24", "end": "2026-10-28", "direction": "aswan-esna", "status": "provisional" },
+    { "start": "2026-11-06", "end": "2026-11-10", "direction": "esna-aswan", "status": "confirmed" },
+    { "start": "2026-11-14", "end": "2026-11-20", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2026-11-27", "end": "2026-12-01", "direction": "esna-aswan", "status": "provisional" },
+    { "start": "2026-12-12", "end": "2026-12-18", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2026-12-23", "end": "2026-12-30", "direction": "esna-aswan", "status": "confirmed" },
+    { "start": "2027-01-08", "end": "2027-01-13", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2027-01-20", "end": "2027-01-24", "direction": "esna-aswan", "status": "provisional" },
+    { "start": "2027-02-04", "end": "2027-02-08", "direction": "aswan-esna", "status": "confirmed" },
+    { "start": "2027-02-17", "end": "2027-02-23", "direction": "esna-aswan", "status": "confirmed" }
+  ],
+  "closures": [
+    { "start": "2026-09-28", "end": "2026-10-01", "reason": "Maintenance in Esna" },
+    { "start": "2027-03-01", "end": "2027-03-14", "reason": "Annual dry dock" }
+  ]
+}
