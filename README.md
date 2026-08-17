@@ -50,8 +50,11 @@ the request format cannot drift apart between the two.
 
 To deploy:
 
-1. Cloudflare dashboard → Workers & Pages → Create → Pages → connect this repo.
-2. Build command: leave empty. Build output directory: `/`.
+1. Cloudflare dashboard → Workers & Pages → Create → Pages, **or** a Worker
+   with static assets. This repository now includes `wrangler.jsonc` and
+   `worker.js` so Workers Builds (`source-to-sea-v2`) can compile the site
+   and the Planyo proxy. Pages continues to use the `functions/` directory;
+   both import `server/planyo-core.mjs`.
 3. Settings → Environment variables → add `PLANYO_API_KEY` (and
    `PLANYO_RESOURCE_ID`, plus `PLANYO_SITE_ID` / `PLANYO_HASH_KEY` if they
    apply). Mark them **encrypted**. They are only ever read server-side.
