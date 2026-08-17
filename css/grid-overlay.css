@@ -1,0 +1,56 @@
+/* =============================================================
+   MEASUREMENT OVERLAY
+   Development only. Press "g" on the homepage, or add ?grid to
+   the URL, to draw the numbers the composition is built from:
+   the pane seam, the river's two banks, the collage stage and
+   each chapter's bounding box.
+   ============================================================= */
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.grid-overlay__v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--tone, var(--ink));
+  opacity: 0.55;
+}
+
+.grid-overlay__v em {
+  position: sticky;
+  top: 120px;
+  display: block;
+  width: max-content;
+  padding: 3px 6px;
+  margin-left: 4px;
+  color: var(--paper);
+  background: var(--tone, var(--ink));
+  font-style: normal;
+}
+
+.grid-overlay__box {
+  position: absolute;
+  border: 1px dashed var(--rust-70);
+  background: rgba(168, 73, 42, 0.045);
+}
+
+.grid-overlay__box em {
+  position: absolute;
+  left: 0;
+  top: -19px;
+  padding: 3px 6px;
+  color: var(--paper);
+  background: var(--rust);
+  font-style: normal;
+  white-space: nowrap;
+}

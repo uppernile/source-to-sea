@@ -1,0 +1,753 @@
+/* =============================================================
+   SOURCE TO SEA — HOMEPAGE
+   A measured composition system.
+
+   Everything below is derived from six numbers rather than from
+   per-image nudging. Change a number here and the whole
+   composition moves as one piece.
+
+       reference viewport   1440 x 900  (13" MacBook Air)
+
+       --pane-left    60vw    864px   scrolling Nile journey
+       --pane-right   40vw    576px   sticky editorial pane
+       --seam         60vw    864px   x of the river centreline
+       --river-w              223px   watercolour width, on the seam
+       --stage-x               72px   left inset of the collage stage
+       --stage-w              760px   collage stage width
+
+   Derived and exposed to the collages as --bank: the distance
+   from the stage's left edge to the river's left bank
+   (864 - 223/2 - 72 = 680px, i.e. ~90% of the stage). Any asset
+   placed past ~82% of the stage grows into the river, which is
+   what stitches the two panes together.
+
+   Inside a scene every x, y and width is a percentage of one
+   bounding box whose aspect ratio is fixed (--scene-ar), so the
+   collage behaves as a single group: it never reflows, never
+   distorts, and is repositioned by moving the box rather than
+   the pieces. No image is ever given both a width and a height.
+   ============================================================= */
+
+:root {
+  --pane-left: 60vw;
+  --pane-right: 40vw;
+  --seam: var(--pane-left);
+  --river-w: clamp(186px, 15.5vw, 240px);
+  --river-top: 132px;
+  --stage-x: clamp(40px, 5vw, 72px);
+  --stage-w: min(760px, calc(var(--pane-left) - var(--stage-x)));
+  --bank: calc(var(--seam) - var(--river-w) / 2 - var(--stage-x));
+}
+
+/* =============================================================
+   THE TWO PANES
+   One continuous sheet of ivory: no border, no divider, no gap.
+   The right pane is sticky rather than fixed so the river
+   experience has a real end and About can use the full width.
+   ============================================================= */
+
+.river-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--pane-left) var(--pane-right);
+  align-items: start;
+  background: var(--paper);
+  /* the collages and the river deliberately bleed past the panes;
+     clip rather than hidden so the sticky pane still works */
+  overflow-x: clip;
+}
+
+/* =============================================================
+   LEFT PANE — the scrolling journey
+   ============================================================= */
+
+.journey {
+  position: relative;
+  z-index: 10;
+  padding-top: 170px;
+}
+
+.scene {
+  position: relative;
+  width: var(--stage-w);
+  margin-left: var(--stage-x);
+}
+
+/* one bounding box per chapter, sized 760 x N at the reference
+   viewport — the brief's 550–700px band */
+.scene--collection {
+  --scene-ar: 760 / 640;
+}
+.scene--journeys {
+  --scene-ar: 760 / 620;
+}
+.scene--editions {
+  --scene-ar: 760 / 660;
+}
+.scene--close {
+  --scene-ar: 760 / 400;
+}
+
+.scene__art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--scene-ar);
+  container-type: inline-size;
+}
+
+.scene__copy {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.scene__copy > * {
+  pointer-events: auto;
+}
+
+.fig {
+  position: absolute;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ---- copy blocks ------------------------------------------ */
+
+.block {
+  position: absolute;
+}
+
+.block__mark {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.block__num {
+  font-family: var(--serif);
+  font-size: var(--fs-num);
+  line-height: 1;
+  color: var(--rust);
+  letter-spacing: 0.02em;
+}
+
+.block h2 {
+  margin: 16px 0 0;
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+.block__lede {
+  margin: 18px 0 0;
+  max-width: 300px;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--ink-70);
+}
+
+.block .cta {
+  margin-top: 24px;
+}
+
+.block__meta {
+  margin: 14px 0 0;
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-50);
+}
+
+/* =============================================================
+   01 / THE COLLECTION
+   boat + reflection + terracotta circle + sketch, read as one
+   cluster sitting to the right of the copy and leaning into
+   the river.
+   ============================================================= */
+
+.block--collection {
+  left: 0;
+  top: 20.6%;
+  width: 260px;
+}
+
+.block--collection h2 {
+  letter-spacing: 0.06em;
+}
+
+.fig--collection-circle {
+  left: 34.9%;
+  top: 11.9%;
+  width: 27.6%;
+  z-index: 1;
+}
+
+.fig--collection-water {
+  left: 39.5%;
+  top: 62.5%;
+  width: 55.3%;
+  z-index: 2;
+  opacity: 0.72;
+}
+
+.fig--collection-boat {
+  left: 42.1%;
+  top: 20%;
+  width: 39.5%;
+  z-index: 3;
+}
+
+/* leans across the left bank so the collage and the river read
+   as one composition rather than two neighbours */
+.fig--collection-sketch {
+  left: 76%;
+  top: 9.4%;
+  width: 17.1%;
+  z-index: 4;
+  opacity: 0.62;
+}
+
+/* =============================================================
+   02 / JOURNEYS
+   ============================================================= */
+
+.block--journeys {
+  left: 49.3%;
+  top: 40.3%;
+  width: 300px;
+}
+
+.block--journeys h2 {
+  font-size: clamp(28px, 2.65vw, 38px);
+}
+
+.fig--journeys-palms {
+  left: 19.7%;
+  top: 10%;
+  width: 19.7%;
+  z-index: 3;
+  opacity: 0.9;
+}
+
+.fig--journeys-circle {
+  left: 23%;
+  top: 53.2%;
+  width: 21.7%;
+  z-index: 1;
+}
+
+.fig--journeys-temple {
+  left: 1.3%;
+  top: 40.3%;
+  width: 25%;
+  z-index: 2;
+}
+
+.fig--journeys-bird {
+  left: 81.6%;
+  top: 9.7%;
+  width: 20.4%;
+  z-index: 4;
+}
+
+/* =============================================================
+   03 / EDITIONS
+   ============================================================= */
+
+.block--editions {
+  left: 52.6%;
+  top: 14.5%;
+  width: 330px;
+}
+
+.block--editions h2 {
+  font-size: clamp(27px, 2.5vw, 36px);
+}
+
+.fig--editions-blue {
+  left: 2.6%;
+  top: 22.7%;
+  width: 32.9%;
+  z-index: 1;
+}
+
+.fig--editions-rust {
+  left: 31%;
+  top: 34.8%;
+  width: 15.8%;
+  z-index: 2;
+}
+
+.fig--editions-bird {
+  left: 80.3%;
+  top: 63.6%;
+  width: 18.4%;
+  z-index: 2;
+  transform: scaleX(-1);
+  opacity: 0.5;
+}
+
+.edition-card {
+  position: absolute;
+  left: 23.5%;
+  top: 50%;
+  width: 19.7%;
+  aspect-ratio: 150 / 212;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.9cqw 1.6cqw;
+  text-align: center;
+  color: #322c24;
+  background: var(--paper-3);
+  box-shadow: 0 12px 28px rgba(22, 19, 15, 0.1);
+  transform: rotate(-2.4deg);
+}
+
+.edition-card span,
+.edition-card small {
+  font-family: var(--sans);
+  font-size: 1.15cqw;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-50);
+}
+
+.edition-card strong {
+  font-family: var(--serif);
+  font-size: 1.9cqw;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+}
+
+/* =============================================================
+   CLOSING — where the river resolves
+   ============================================================= */
+
+.block--close {
+  left: 0;
+  top: 18%;
+  width: 320px;
+}
+
+.block--close h2 {
+  margin: 0;
+}
+
+.block--closing-note {
+  left: 52.6%;
+  top: 22%;
+  width: 300px;
+}
+
+.block--closing-note p {
+  margin: 0 0 10px;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+.block--closing-note .rule {
+  margin-top: 26px;
+}
+
+/* =============================================================
+   RIGHT PANE — the editorial anchor
+   Its left padding clears the river's right bank, so the
+   watercolour never runs underneath the headline.
+   ============================================================= */
+
+.pane {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  height: 100vh;
+  padding: 148px clamp(32px, 4vw, 60px) 64px
+    calc(var(--river-w) / 2 + clamp(26px, 2.6vw, 40px));
+}
+
+.pane__kicker {
+  margin: 0 0 26px;
+}
+
+.pane h1 {
+  margin: 0;
+  font-size: var(--fs-hero);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.032em;
+}
+
+.pane .rule {
+  margin: 30px 0;
+}
+
+.pane__manifesto {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  line-height: 2.1;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-70);
+}
+
+/* ---- chapter index ---------------------------------------- */
+
+.chapters {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 30px;
+}
+
+.chapters a {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 8px 0;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-50);
+  transition: color 0.3s var(--ease);
+}
+
+.chapters a:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.chapters b {
+  font-family: var(--serif);
+  font-size: var(--fs-num);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink-30);
+  transition: color 0.3s var(--ease);
+}
+
+.chapters span {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.chapters a:hover,
+.chapters a.is-current {
+  color: var(--ink);
+}
+
+.chapters a:hover b,
+.chapters a.is-current b {
+  color: var(--rust);
+}
+
+.pane__note {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--ink-70);
+}
+
+/* Shorter laptops: keep the hero readable, shed the slack. */
+@media (max-height: 860px) {
+  .pane {
+    padding-top: 130px;
+    padding-bottom: 46px;
+    gap: 26px;
+  }
+
+  .pane .rule {
+    margin: 22px 0;
+  }
+
+  .pane__kicker {
+    margin-bottom: 18px;
+  }
+
+  .chapters {
+    margin-bottom: 20px;
+  }
+}
+
+/* =============================================================
+   THE NILE
+   One continuous watercolour laid over the seam, belonging to
+   neither pane. js/river.js lays out tiles at the artwork's
+   natural aspect ratio — never stretched — mirroring each one
+   against its neighbour and cross-fading the overlap, so the
+   river reads as a single unbroken course rather than
+   repeating wallpaper.
+   ============================================================= */
+
+.river {
+  position: absolute;
+  top: var(--river-top);
+  /* room for the final tile to finish fading before the paper
+     changes colour at About */
+  bottom: 56px;
+  left: var(--seam);
+  width: var(--river-w);
+  z-index: 6;
+  transform: translateX(-50%);
+  pointer-events: none;
+  --river-ar: 456 / 900;
+  --fade: 13%;
+}
+
+.river__flow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.river__tile {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  aspect-ratio: var(--river-ar);
+  background-image: url("../assets/nile-watercolor.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+}
+
+.river__tile--flip {
+  transform: scaleY(-1);
+}
+
+/* the dahabiya carried downstream by the scroll */
+.river__boat {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 40%;
+  height: auto;
+  z-index: 2;
+  opacity: 0;
+  transform: translate3d(-50%, 0, 0);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .river__boat {
+    display: none;
+  }
+}
+
+/* =============================================================
+   OFF-RIVER CONTENT
+   The river experience is over; the page goes quiet and full
+   width for About and the partner hand-off.
+   ============================================================= */
+
+.about {
+  padding: clamp(72px, 8vw, 120px) clamp(24px, 5vw, 80px);
+  background: var(--paper-2);
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: clamp(40px, 6vw, 96px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.about h2 {
+  margin: 18px 0 0;
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.about__body p {
+  margin: 0 0 22px;
+  max-width: 62ch;
+  font-size: var(--fs-body);
+  line-height: 1.62;
+}
+
+.about__body p:last-child {
+  margin-bottom: 0;
+}
+
+.about__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 28px;
+  margin-top: 44px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+
+.about__facts div {
+  display: grid;
+  gap: 8px;
+}
+
+.about__facts b {
+  font-family: var(--serif);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.partners {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: clamp(60px, 7vw, 96px) clamp(24px, 5vw, 80px);
+  background: #17191a;
+  color: var(--paper);
+}
+
+.partners h2 {
+  margin: 16px 0 14px;
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.partners p {
+  margin: 0;
+  max-width: 46ch;
+  color: rgba(244, 239, 231, 0.72);
+}
+
+.partners .cta {
+  background: transparent;
+  border-color: #cf7c4f;
+  color: #e0916a;
+}
+
+.partners .cta:hover {
+  background: #cf7c4f;
+  color: #17191a;
+}
+
+/* =============================================================
+   NARROW SCREENS
+   Below 1080px the two-pane composition stops being honest.
+   The pane unsticks, the river moves to the right margin, and
+   each collage keeps its exact internal composition while
+   scaling down as one group — the copy leaves the box and
+   stacks above it so the typography stays readable.
+   ============================================================= */
+
+@media (max-width: 1080px) {
+  :root {
+    --pane-left: 100%;
+    --pane-right: 100%;
+    --stage-w: min(760px, calc(100% - var(--stage-x) * 2));
+    --river-w: clamp(130px, 22vw, 200px);
+  }
+
+  .river-stage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* the editorial pane leads, then the journey scrolls beneath it */
+  .pane {
+    order: -1;
+    position: relative;
+    height: auto;
+    min-height: 88vh;
+    padding: 150px clamp(24px, 6vw, 64px) 70px;
+  }
+
+  /* pushed into the right margin, and faded out where it meets
+     the edge of the screen so the paint never ends on a hard line */
+  .river {
+    left: auto;
+    right: 0;
+    transform: translateX(40%);
+    opacity: 0.7;
+    /* the screen edge cuts the river at 60% of its width, so the
+       paint is gone by then */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 18%,
+      rgba(0, 0, 0, 0.3) 44%,
+      transparent 60%
+    );
+    mask-image: linear-gradient(to right, #000 18%, rgba(0, 0, 0, 0.3) 44%, transparent 60%);
+  }
+
+  .journey {
+    padding-top: 24px;
+  }
+
+  .scene {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-inline: var(--stage-x);
+  }
+
+  .scene__copy {
+    position: static;
+    order: -1;
+  }
+
+  .scene__copy .block {
+    position: static;
+    width: auto;
+    max-width: 34rem;
+    margin-bottom: 26px;
+  }
+
+  .scene__copy .block:last-child {
+    margin-bottom: 0;
+  }
+
+  .scene--close .scene__art {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --stage-x: 22px;
+  }
+
+  .river {
+    transform: translateX(48%);
+    opacity: 0.5;
+  }
+
+  .about__inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .partners {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
